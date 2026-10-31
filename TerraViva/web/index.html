@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TerraViva — Apoio ao Agricultor Familiar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="styleIndex.css">
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <i class="fas fa-leaf"></i>
+        TerraViva
+      </a>
+      <button class="mobile-menu-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#sobre">Por que Regenerativa?</a></li>
+        <li><a href="#principios">Princípios</a></li>
+        <li><a href="#ferramentas">Ferramentas</a></li>
+        <li><a href="#recursos">Materiais</a></li>
+        <li><a href="#comunidade">Comunidade</a></li>
+        <li><a href="#contato">Contato</a></li>
+        <li class="login"><a href="">Fazer Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content glass-panel reveal">
+      <span class="hero-tag">Agronomia Regenerativa</span>
+      <h1>Fortalecer quem <span>cultiva</span> o futuro</h1>
+      <p>Recursos gratuitos, ferramentas práticas e uma comunidade vibrante para agricultores familiares que querem transformar a terra com tecnologia e prosperidade.</p>
+      <div class="hero-buttons">
+        <a href="login.html" class="btn btn-primary">
+          <i class="fas fa-desktop"></i> Acessar Painel
+        </a>
+        <a href="#recursos" class="btn btn-outline">
+          <i class="fas fa-book-open"></i> Materiais Educativos
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="sobre">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="divider"></div>
+        <h2>Por que Agricultura Regenerativa?</h2>
+        <p>A agricultura familiar brasileira produz 70% dos alimentos que consumimos. Imaginem se, além de alimentar, também regenerasse solos, aumentasse a biodiversidade e garantisse renda justa.</p>
+      </div>
+
+      <div class="sobre-grid">
+        <div class="sobre-text reveal">
+          <h3>Do pequeno produtor ao microempreendedor rural</h3>
+          <p>A agronomia regenerativa não precisa de grandes máquinas ou investimentos milionários. Ela começa com conhecimento: entender os ciclos da natureza, recuperar a vida do solo e criar sistemas produtivos que melhoram a cada safra.</p>
+          <p>Nosso portal foi desenhado junto com agricultores para oferecer um painel acessível, simuladores práticos e uma rede de apoio que funciona na realidade do campo.</p>
+
+          <div class="sobre-stats">
+            <div class="stat-item glass-panel">
+              <div class="num">4.1M</div>
+              <div class="label">Produtores familiares no Brasil</div>
+            </div>
+            <div class="stat-item glass-panel">
+              <div class="num">35%</div>
+              <div class="label">Incremento na renda em 3 anos</div>
+            </div>
+            <div class="stat-item glass-panel">
+              <div class="num">80%</div>
+              <div class="label">Economia em insumos químicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="sobre-image glass-panel reveal">
+          <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&auto=format&fit=crop&q=80" alt="Agricultor">
+          <div class="badge">
+            <i class="fas fa-satellite-dish"></i>
+            <span>Monitoramento inteligente do campo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="principios">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="divider"></div>
+        <h2>Princípios para Transformar sua Produção</h2>
+        <p>Pilares práticos que qualquer produtor pode aplicar, integrados com a nossa tecnologia de gestão.</p>
+      </div>
+
+      <div class="principios-grid">
+        <div class="principio-card glass-panel reveal">
+          <div class="principio-icon"><i class="fas fa-recycle"></i></div>
+          <h3>Mínimo revolvimento</h3>
+          <p>Evitar aração intensa preserva a microfauna, fungos benéficos e a estrutura que retém água e nutrientes.</p>
+        </div>
+        <div class="principio-card glass-panel reveal">
+          <div class="principio-icon"><i class="fas fa-shield-alt"></i></div>
+          <h3>Cobertura permanente</h3>
+          <p>Mantendo a terra sempre protegida por palhada, você reduz erosão e cria habitat para organismos do solo.</p>
+        </div>
+        <div class="principio-card glass-panel reveal">
+          <div class="principio-icon"><i class="fas fa-project-diagram"></i></div>
+          <h3>Diversidade de espécies</h3>
+          <p>Consórcios, rotações e agroflorestas quebram ciclos de pragas e aumentam a resiliência climática.</p>
+        </div>
+        <div class="principio-card glass-panel reveal">
+          <div class="principio-icon"><i class="fas fa-horse"></i></div>
+          <h3>Integração animal-vegetal</h3>
+          <p>O pastoreio planejado e a reciclagem de nutrientes fecham ciclos produtivos e reduzem dependência.</p>
+        </div>
+        <div class="principio-card glass-panel reveal">
+          <div class="principio-icon"><i class="fas fa-water"></i></div>
+          <h3>Gestão hídrica inteligente</h3>
+          <p>Microbacias, terraços e solo vivo garantem infiltração e recarga dos lençóis freáticos locais.</p>
+        </div>
+        <div class="principio-card glass-panel reveal">
+          <div class="principio-icon"><i class="fas fa-chart-line"></i></div>
+          <h3>Viabilidade econômica</h3>
+          <p>Focamos em modelos de negócio que valorizam o produtor, controlados diretamente pelo seu painel.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ferramentas">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="divider"></div>
+        <h2>Ferramentas Integradas</h2>
+        <p>Calculadoras e simuladores desenvolvidos com a mesma tecnologia do nosso Dashboard central.</p>
+      </div>
+
+      <div class="tool-tabs reveal">
+        <button class="tool-tab active" onclick="switchTab('calc')">
+          <i class="fas fa-calculator"></i> Calc. de Cobertura
+        </button>
+        <button class="tool-tab" onclick="switchTab('carbono')">
+          <i class="fas fa-cloud"></i> Estimador de Carbono
+        </button>
+        <button class="tool-tab" onclick="switchTab('calendario')">
+          <i class="fas fa-calendar-alt"></i> Calendário Rural
+        </button>
+      </div>
+
+      <div id="panel-calc" class="tool-panel active">
+        <div class="calculator glass-panel">
+          <div class="calc-group">
+            <label for="area">Área da propriedade (hectares)</label>
+            <input type="number" id="area" placeholder="Ex: 5" min="0.1" step="0.1">
+          </div>
+          <div class="calc-group">
+            <label for="objetivo">Objetivo da cobertura</label>
+            <select id="objetivo">
+              <option value="15">Adubar solo exaurido (15 kg semente/ha)</option>
+              <option value="25">Consórcio com cultura principal (25 kg/ha)</option>
+              <option value="40">Pasto para gado de corte (40 kg/ha)</option>
+            </select>
+          </div>
+          <div class="calc-group">
+            <label for="mix">Mix de espécies</label>
+            <select id="mix">
+              <option value="1">Leguminosa pura (1x)</option>
+              <option value="1.3">Brássica + leguminosa (1,3x)</option>
+              <option value="1.5">Diversificado 4+ espécies (1,5x)</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="calcularCobertura()" style="width:100%; justify-content:center;">
+            Calcular Sementes
+          </button>
+          <div class="calc-result" id="result-cobertura">
+            <div style="font-size: 14px; margin-bottom: 5px; color: var(--text-muted);">Estimativa Recomendada</div>
+            <div class="value" id="valor-cobertura">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="panel-carbono" class="tool-panel">
+        <div class="calculator glass-panel">
+          <div class="calc-group">
+            <label for="area-c">Área em regeneração (hectares)</label>
+            <input type="number" id="area-c" placeholder="Ex: 10" min="0.1" step="0.1">
+          </div>
+          <div class="calc-group">
+            <label for="pratica">Prática adotada</label>
+            <select id="pratica">
+              <option value="0.5">Mínimo revolvimento + cobertura (0,5 t CO₂/ha/ano)</option>
+              <option value="1.2">Agrofloresta em formação (1,2 t CO₂/ha/ano)</option>
+              <option value="3.5">Sistema silvipastoril maduro (3,5 t CO₂/ha/ano)</option>
+            </select>
+          </div>
+          <div class="calc-group">
+            <label for="anos">Anos em regeneração</label>
+            <input type="number" id="anos" placeholder="Ex: 3" min="1" max="30">
+          </div>
+          <button class="btn btn-primary" onclick="calcularCarbono()" style="width:100%; justify-content:center;">
+            Estimar Estoque
+          </button>
+          <div class="calc-result" id="result-carbono">
+            <div style="font-size: 14px; margin-bottom: 5px; color: var(--text-muted);">Carbono Seqüestrado</div>
+            <div class="value" id="valor-carbono">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="panel-calendario" class="tool-panel">
+        <div class="calendar-box glass-panel">
+          <div class="calendar-header">
+            <h3><i class="fas fa-moon"></i> Calendário de Operações</h3>
+            <div class="calendar-nav">
+              <button><i class="fas fa-chevron-left"></i></button>
+              <button><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+          <div class="calendar-grid" id="calendarGrid">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="recursos">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="divider"></div>
+        <h2>Biblioteca de Conhecimento</h2>
+        <p>Acesse documentações e manuais técnicos padronizados para o campo.</p>
+      </div>
+
+      <div class="recurso-list">
+        <div class="recurso-item glass-panel reveal">
+          <div class="recurso-icon"><i class="fas fa-file-pdf"></i></div>
+          <div class="recurso-content">
+            <h4>Manual de Baixo Carbono</h4>
+            <p>Diretrizes para transição agroecológica.</p>
+            <span class="tag">Gratuito</span>
+          </div>
+        </div>
+
+        <div class="recurso-item glass-panel reveal">
+          <div class="recurso-icon"><i class="fas fa-map"></i></div>
+          <div class="recurso-content">
+            <h4>Curvas de Nível</h4>
+            <p>Guia técnico de conservação do solo.</p>
+            <span class="tag">Técnico</span>
+          </div>
+        </div>
+
+        <div class="recurso-item glass-panel reveal">
+          <div class="recurso-icon"><i class="fas fa-video"></i></div>
+          <div class="recurso-content">
+            <h4>Cobertura no Inverno</h4>
+            <p>Semeadura direta passo a passo.</p>
+            <span class="tag">Vídeo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="comunidade">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="divider"></div>
+        <h2>Rede de Suporte</h2>
+        <p>Conecte-se com outros produtores através do fórum da plataforma.</p>
+      </div>
+
+      <div class="forum-preview">
+        <div class="forum-topic glass-panel reveal">
+          <div class="forum-avatar">JM</div>
+          <div class="forum-info">
+            <h4>Consórcio milho + feijão de porco nasceu bem, mas está raleado</h4>
+            <p>José M. • Zona da Mata Mineira</p>
+          </div>
+          <div class="forum-meta">
+            <div class="count"><i class="fas fa-comment"></i> 12</div>
+            <div>Há 2 horas</div>
+          </div>
+        </div>
+
+        <div class="forum-topic glass-panel reveal">
+          <div class="forum-avatar">AL</div>
+          <div class="forum-info">
+            <h4>Tempo para melhora na infiltração lida pelos sensores?</h4>
+            <p>Ana L. • Assentamento RS</p>
+          </div>
+          <div class="forum-meta">
+            <div class="count"><i class="fas fa-comment"></i> 8</div>
+            <div>Há 5 horas</div>
+          </div>
+        </div>
+
+        <div class="forum-topic glass-panel reveal">
+          <div class="forum-avatar">RC</div>
+          <div class="forum-info">
+            <h4>Integração dos dados meteorológicos com a API</h4>
+            <p>Roberto C. • Vale do Paraíba</p>
+          </div>
+          <div class="forum-meta">
+            <div class="count"><i class="fas fa-comment"></i> 15</div>
+            <div>Ontem</div>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top:2rem;">
+          <button class="btn btn-outline" onclick="document.getElementById('contato').scrollIntoView({behavior:'smooth'})">
+            <i class="fas fa-users"></i> Acessar Comunidade
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contato">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="divider"></div>
+        <h2>Fique Conectado</h2>
+        <p>Receba atualizações do sistema e boletins técnicos de manejo.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <h3>Newsletter Técnica</h3>
+          <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Inscrição confirmada!');">
+            <input type="email" placeholder="seu@email.com" required>
+            <button type="submit" class="btn btn-primary">Inscrever</button>
+          </form>
+          
+          <div style="margin-top:2.5rem;">
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>suporte@agrosistema.com.br</span>
+            </div>
+            <div class="contact-item">
+              <i class="fab fa-whatsapp"></i>
+              <span>(11) 98765-4321 — Suporte ao Produtor</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-panel reveal" style="padding:2rem;">
+          <h3 style="margin-bottom:1.5rem; color: var(--text-main);">Abra um Chamado</h3>
+          <form onsubmit="event.preventDefault(); alert('Enviado!');">
+            <div class="calc-group">
+              <input type="text" placeholder="Seu nome" required>
+            </div>
+            <div class="calc-group">
+              <input type="email" placeholder="Seu e-mail" required>
+            </div>
+            <div class="calc-group">
+              <textarea placeholder="Como podemos ajudar?" rows="4" required style="width:100%; padding:0.9rem; border-radius:12px; background:rgba(0,0,0,0.3); border:1px solid var(--border-light); color:white; font-family:inherit; outline:none; resize:none;"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+              <i class="fas fa-paper-plane"></i> Enviar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="#sobre">Sobre</a>
+      <a href="#principios">Princípios</a>
+      <a href="#ferramentas">Ferramentas</a>
+      <a href="#recursos">Recursos</a>
+    </div>
+    <p><i class="fas fa-leaf" style="color: var(--accent-primary);"></i> AgroSistema — Tecnologia Regenerativa. Feito para modernizar o campo.</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('open');
+      });
+    });
+
+    function switchTab(id) {
+      document.querySelectorAll('.tool-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      document.getElementById('panel-' + id).classList.add('active');
+    }
+
+    function calcularCobertura() {
+      const area = parseFloat(document.getElementById('area').value) || 0;
+      const taxa = parseFloat(document.getElementById('objetivo').value) || 0;
+      const mix = parseFloat(document.getElementById('mix').value) || 1;
+      if (area <= 0) return alert('Informe a área.');
+      document.getElementById('valor-cobertura').textContent = (area * taxa * mix).toLocaleString('pt-BR', {maximumFractionDigits:1}) + ' kg';
+      document.getElementById('result-cobertura').classList.add('show');
+    }
+
+    function calcularCarbono() {
+      const area = parseFloat(document.getElementById('area-c').value) || 0;
+      const pratica = parseFloat(document.getElementById('pratica').value) || 0;
+      const anos = parseFloat(document.getElementById('anos').value) || 1;
+      if (area <= 0) return alert('Informe a área.');
+      document.getElementById('valor-carbono').textContent = (area * pratica * anos).toLocaleString('pt-BR', {maximumFractionDigits:1}) + ' t CO₂';
+      document.getElementById('result-carbono').classList.add('show');
+    }
+
+    const diasSemana = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    const fases = [
+      { dia:1, m:'🌑', at:'' }, { dia:2, m:'🌒', at:'' }, { dia:3, m:'🌒', at:'Plantar' },
+      { dia:4, m:'🌒', at:'Plantar' }, { dia:5, m:'🌓', at:'' }, { dia:6, m:'🌓', at:'' },
+      { dia:7, m:'🌔', at:'Adubar' }, { dia:8, m:'🌔', at:'Adubar' }, { dia:9, m:'🌕', at:'' },
+      { dia:10, m:'🌕', at:'' }, { dia:11, m:'🌖', at:'' }, { dia:12, m:'🌖', at:'Cobert.' },
+      { dia:13, m:'🌗', at:'' }, { dia:14, m:'🌗', at:'' }, { dia:15, m:'🌘', at:'' },
+      { dia:16, m:'🌘', at:'' }, { dia:17, m:'🌑', at:'' }, { dia:18, m:'🌑', at:'Manejo' },
+      { dia:19, m:'🌒', at:'Plantar' }, { dia:20, m:'🌒', at:'Plantar' }, { dia:21, m:'🌓', at:'' },
+      { dia:22, m:'🌓', at:'' }, { dia:23, m:'🌔', at:'Adubar' }, { dia:24, m:'🌔', at:'Adubar' },
+      { dia:25, m:'🌕', at:'' }, { dia:26, m:'🌕', at:'' }, { dia:27, m:'🌖', at:'' },
+      { dia:28, m:'🌖', at:'Cobert.' }, { dia:29, m:'🌗', at:'' }, { dia:30, m:'🌗', at:'' }
+    ];
+    const grid = document.getElementById('calendarGrid');
+
+    diasSemana.forEach(d => {
+      const el = document.createElement('div'); el.className = 'day-name'; el.textContent = d; grid.appendChild(el);
+    });
+
+    for (let i=0; i<5; i++) {
+      const el = document.createElement('div'); el.className = 'day other'; grid.appendChild(el);
+    }
+
+    fases.forEach(f => {
+      const el = document.createElement('div'); el.className = 'day';
+      el.innerHTML = `<strong>${f.dia}</strong><span class="moon">${f.m}</span>${f.at ? `<div class="activity">${f.at}</div>` : ''}`;
+      grid.appendChild(el);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      nav.style.boxShadow = window.scrollY > 50 ? '0 8px 32px 0 rgba(0,0,0,0.4)' : 'none';
+      nav.style.background = window.scrollY > 50 ? 'rgba(13, 19, 16, 0.95)' : 'rgba(13, 19, 16, 0.8)';
+    });
+  </script>
+</body>
+</html>

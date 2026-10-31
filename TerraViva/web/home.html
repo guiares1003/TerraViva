@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSistema - Painel de Controle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="home.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">
+            <i class="fa-solid fa-leaf"></i>
+            <span>TerraViva</span>
+        </div>
+        
+        <ul class="nav-menu">
+            <li><a href="#" class="nav-item active"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="cultivos.html" class="nav-item"><i class="fa-solid fa-seedling"></i> Cultivos</a></li>
+            <li><a href="#" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendário</a></li>
+            <li><a href="#" class="nav-item"><i class="fa-solid fa-cloud-sun-rain"></i> Clima</a></li>
+            <li><a href="#" class="nav-item"><i class="fa-solid fa-boxes-stacked"></i> Estoque</a></li>
+            <li><a href="#" class="nav-item"><i class="fa-solid fa-sack-dollar"></i> Financeiro</a></li>
+            <li><a href="#" class="nav-item"><i class="fa-solid fa-cart-shopping"></i> Vendas</a></li>
+            <li><a href="#" class="nav-item"><i class="fa-solid fa-list-check"></i> Atividades</a></li>
+            <li><a href="#" class="nav-item"><i class="fa-solid fa-bug"></i> Pragas</a></li>
+            <li><a href="#" class="nav-item"><i class="fa-solid fa-recycle"></i> Sustentabilidade</a></li>
+        </ul>
+
+        <div class="user-profile-sidebar">
+            <div class="avatar" id="userAvatar">GA</div>
+            <div class="user-info">
+                <h4 id="userName">Produtor</h4>
+                <p>Fazenda Esperança</p>
+            </div>
+            <i class="fa-solid fa-gear" style="margin-left: auto; color: var(--text-muted); cursor: pointer;" onclick="window.location.href='login.html'" title="Sair"></i>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="greeting">
+                <h1 id="welcomeTitle">Bem-vindo de volta!</h1>
+                <p>Visão geral e monitoramento das suas operações agrícolas.</p>
+            </div>
+            <div class="header-actions">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+                    <input type="text" placeholder="Buscar no sistema...">
+                </div>
+                <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+                <button class="icon-btn"><i class="fa-regular fa-envelope"></i></button>
+            </div>
+        </header>
+
+        <div class="kpi-grid">
+            <div class="glass-panel kpi-card">
+                <div class="kpi-header">
+                    <span>Cultivos Ativos</span>
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+                <div class="kpi-value" id="valCultivos">--</div>
+                <div class="kpi-footer">
+                    <span class="text-success"><i class="fa-solid fa-circle" style="font-size: 8px;"></i> Cadastrados no Banco</span>
+                </div>
+                <div class="mini-chart"></div>
+            </div>
+
+            <div class="glass-panel kpi-card">
+                <div class="kpi-header">
+                    <span>Estoque Insumos</span>
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+                <div class="kpi-value" id="valEstoque">--</div>
+                <div class="kpi-footer text-warning">
+                    <i class="fa-solid fa-triangle-exclamation"></i> <span id="valEstoqueBaixo">3</span> Estoque Baixo
+                </div>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: -5px;">(Registros no sistema)</p>
+            </div>
+
+            <div class="glass-panel kpi-card">
+                <div class="kpi-header">
+                    <span>Resumo Financeiro</span>
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+                <div class="kpi-value" id="valFinanceiro">R$ 3.500</div>
+                <div class="kpi-footer">
+                    <span class="text-success"><i class="fa-solid fa-arrow-up"></i> Receitas</span> &nbsp;|&nbsp; 
+                    <span class="text-danger"><i class="fa-solid fa-arrow-down"></i> Despesas</span>
+                </div>
+            </div>
+
+            <div class="glass-panel kpi-card">
+                <div class="kpi-header">
+                    <span>Vendas Registradas</span>
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+                <div class="kpi-value" id="valVendas">--</div>
+                <div class="kpi-footer">
+                    <i class="fa-regular fa-clock"></i> Histórico total
+                </div>
+            </div>
+        </div>
+
+        <div class="middle-grid">
+            <div class="glass-panel chart-panel">
+                <div class="panel-title">
+                    Tendências de Produção vs. Vendas 
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+                <div class="chart-container">
+                    <canvas id="graficoTendencias"></canvas>
+                </div>
+            </div>
+
+            <div class="glass-panel map-panel">
+                <div class="panel-title">
+                    Monitoramento Espacial
+                    <i class="fa-solid fa-expand"></i>
+                </div>
+                <div class="map-placeholder">
+                    <div class="map-overlay">
+                        <span style="background: var(--bg-panel); padding: 8px 16px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border-color);"><i class="fa-solid fa-satellite-dish"></i> Sensores Ativos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-grid">
+            <div class="glass-panel activities-panel">
+                <div class="panel-title">Próximas Atividades</div>
+                <div class="activity-cards">
+                    <div class="act-card">
+                        <span class="act-status status-done">Concluído hoje</span>
+                        <div class="act-title">Irrigação Setor Sul</div>
+                        <div class="act-desc"><i class="fa-solid fa-droplet" style="color: #60a5fa;"></i> Gotejamento</div>
+                    </div>
+                    <div class="act-card">
+                        <span class="act-status status-pend">Amanhã</span>
+                        <div class="act-title">Verificação Pragas</div>
+                        <div class="act-desc"><i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i> Checagem geral</div>
+                    </div>
+                    <div class="act-card">
+                        <span class="act-status status-pend">Próxima Semana</span>
+                        <div class="act-title">Colheita Geral</div>
+                        <div class="act-desc"><i class="fa-solid fa-truck-fast" style="color: var(--text-muted);"></i> Preparar transporte</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel weather-panel">
+                <div class="panel-title" style="margin-bottom: 5px;">
+                    <span><i class="fa-solid fa-location-dot"></i> Clima em Tempo Real</span>
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+                <div class="weather-main">
+                    <div style="text-align: center;">
+                        <i class="fa-solid fa-cloud-sun" style="font-size: 36px; color: #fde047;"></i>
+                        <div class="weather-temp">28°C</div>
+                    </div>
+                    <div class="weather-info">
+                        <div><i class="fa-solid fa-droplet"></i> Umidade: 65%</div>
+                        <div><i class="fa-solid fa-wind"></i> Vento: 12 km/h</div>
+                        <div><i class="fa-solid fa-leaf"></i> Solo: Ideal</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const nomeUsuario = localStorage.getItem('usuarioLogado');
+        if (nomeUsuario) {
+            document.getElementById('userName').textContent = nomeUsuario;
+            document.getElementById('welcomeTitle').textContent = `Bem-vindo de volta, ${nomeUsuario}!`;
+            
+            const iniciais = nomeUsuario.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            document.getElementById('userAvatar').textContent = iniciais;
+        }
+
+        async function carregarDashboard() {
+            try {
+                const response = await fetch('http://localhost:8080/api/dashboard/resumo');
+                
+                if (response.ok) {
+                    const dados = await response.json();
+                    
+                    document.getElementById('valCultivos').textContent = dados.cultivosAtivos;
+                    document.getElementById('valEstoque').textContent = dados.estoqueTotal;
+                    document.getElementById('valEstoqueBaixo').textContent = dados.estoqueBaixo;
+                    document.getElementById('valVendas').textContent = dados.vendasMes;
+                } else {
+                    console.error('Erro ao buscar dados do dashboard');
+                }
+            } catch (error) {
+                console.error('Falha de conexão com a API:', error);
+            }
+        }
+
+        carregarDashboard();
+        const ctx = document.getElementById('graficoTendencias').getContext('2d');
+        const graficoTendencias = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro'],
+                datasets: [
+                    {
+                        label: 'Produção (Ton)',
+                        data: [12, 19, 15, 22, 28, 34],
+                        borderColor: '#4ade80',
+                        backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Vendas (Mil R$)',
+                        data: [8, 12, 10, 18, 24, 30],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#9ca3af',
+                            font: {
+                                family: 'Inter',
+                                size: 12
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: '#9ca3af'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: '#9ca3af'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

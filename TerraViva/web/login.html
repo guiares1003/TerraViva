@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TerraViva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="logo">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+            </svg>
+            TerraViva
+        </div>
+        <p class="subtitle">Gestão inteligente para o campo</p>
+        
+        <form action="login.php" id="formLogin" method="POST">
+            <div class="form-group">
+                <label for="email">E-mail de acesso</label>
+                <input type="email" id="email" name="email" required placeholder="exemplo@fazenda.com.br">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" required placeholder="••••••••">
+            </div>
+            
+            <button type="submit" class="btn-login">Acessar Sistema</button>
+        </form>
+
+        <div class="footer-links">
+            <a href="#">Esqueci minha senha</a>
+            <a href="registro.html">Criar conta</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('formLogin').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            fetch('http://localhost:8080/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    senha: password
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('E-mail ou senha inválidos!');
+                }
+            })
+            .then(data => {
+                alert('Bem-vindo(a), ' + data.nome + '!');
+                window.location.href = 'home.html';
+            })
+            .catch(error => {
+                alert(error.message);
+                console.error('Erro:', error);
+            });
+        });
+    </script>
+</body>
+</html>
