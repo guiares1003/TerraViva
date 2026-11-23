@@ -1,0 +1,232 @@
+/* Reaproveita todo o visual base (sidebar, glass-panel, botões, modal, tema) */
+@import url('cultivos.css');
+
+:root {
+    --c-plantio: #4ade80;
+    --c-colheita: #f59e0b;
+    --c-irrigacao: #38bdf8;
+    --c-adubacao: #a78bfa;
+    --c-defensivo: #f472b6;
+    --c-poda: #fb923c;
+    --c-inspecao: #2dd4bf;
+    --c-outro: #9ca3af;
+}
+
+/* ---------- Barra de ferramentas ---------- */
+.cal-toolbar {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.cal-nav { display: flex; align-items: center; gap: 10px; }
+.cal-nav .icon-btn {
+    width: 36px; height: 36px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all .3s;
+}
+.cal-nav .icon-btn:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+.cal-title { font-size: 18px; font-weight: 600; min-width: 220px; text-transform: capitalize; }
+
+.view-switch {
+    display: flex;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.view-switch button {
+    background: transparent; border: none;
+    padding: 8px 16px;
+    color: var(--text-muted);
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all .3s;
+}
+.view-switch button:hover { color: var(--text-main); }
+.view-switch button.active { background: var(--accent-primary); color: #000; font-weight: 600; }
+
+.filter-box { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 13px; }
+
+/* selects e textarea (cultivos.css só estiliza input) */
+.form-group select,
+.form-group textarea,
+.filter-box select {
+    padding: 10px 14px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    color: var(--text-main);
+    outline: none;
+    font-size: 14px;
+}
+.form-group select:focus,
+.form-group textarea:focus,
+.filter-box select:focus { border-color: var(--accent-primary); }
+.form-group textarea { resize: vertical; min-height: 60px; }
+select option { background: #132218; color: var(--text-main); }
+
+/* ---------- Legenda ---------- */
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 0 4px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+
+/* ---------- Painel do calendário ---------- */
+.cal-panel { padding: 16px; flex: 1; min-height: 520px; }
+
+.cal-weekdays, .cal-month-grid, .cal-week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+.cal-weekdays div {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 12px; font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.cal-cell {
+    min-height: 112px;
+    padding: 6px;
+    border: 1px solid var(--border-light);
+    margin: -0.5px;
+    cursor: pointer;
+    display: flex; flex-direction: column; gap: 3px;
+    transition: background .2s;
+}
+.cal-cell:hover { background: rgba(255,255,255,0.03); }
+.cal-cell.other-month { opacity: .35; }
+.cal-cell.today { background: rgba(74,222,128,0.07); }
+.cal-cell.today .day-num { background: var(--accent-primary); color: #000; }
+.day-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600;
+    margin-bottom: 2px;
+}
+.more-link { font-size: 11px; color: var(--accent-primary); padding: 2px 4px; cursor: pointer; }
+.more-link:hover { text-decoration: underline; }
+
+/* ---------- Chip de evento ---------- */
+.cal-event {
+    --c: var(--c-outro);
+    display: flex; align-items: center; gap: 6px;
+    padding: 3px 7px;
+    font-size: 11.5px;
+    border-left: 3px solid var(--c);
+    background: color-mix(in srgb, var(--c) 16%, transparent);
+    border-radius: 4px;
+    cursor: pointer;
+    overflow: hidden;
+}
+.cal-event i { color: var(--c); font-size: 10px; }
+.cal-event span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cal-event:hover { background: color-mix(in srgb, var(--c) 28%, transparent); }
+.cal-event.done span { text-decoration: line-through; opacity: .55; }
+.cal-event.overdue { border-left-color: var(--danger); }
+.cal-event.overdue i { color: var(--danger); }
+
+.tipo-plantio   { --c: var(--c-plantio); }
+.tipo-colheita  { --c: var(--c-colheita); }
+.tipo-irrigacao { --c: var(--c-irrigacao); }
+.tipo-adubacao  { --c: var(--c-adubacao); }
+.tipo-defensivo { --c: var(--c-defensivo); }
+.tipo-poda      { --c: var(--c-poda); }
+.tipo-inspecao  { --c: var(--c-inspecao); }
+.tipo-outro     { --c: var(--c-outro); }
+
+/* ---------- Semana ---------- */
+.week-col {
+    border: 1px solid var(--border-light);
+    margin: -0.5px;
+    min-height: 420px;
+    padding: 8px;
+    display: flex; flex-direction: column; gap: 6px;
+    cursor: pointer;
+}
+.week-col:hover { background: rgba(255,255,255,0.03); }
+.week-col.today { background: rgba(74,222,128,0.07); }
+.week-head { text-align: center; padding-bottom: 8px; border-bottom: 1px solid var(--border-light); }
+.week-head small { display: block; font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+.week-head strong { font-size: 20px; }
+.week-col.today .week-head strong { color: var(--accent-primary); }
+
+/* ---------- Dia ---------- */
+.day-list { display: flex; flex-direction: column; gap: 12px; padding: 8px; }
+.day-card {
+    --c: var(--c-outro);
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 18px;
+    border: 1px solid var(--border-light);
+    border-left: 4px solid var(--c);
+    border-radius: 12px;
+    background: rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: background .2s;
+}
+.day-card:hover { background: var(--bg-panel-hover); }
+.day-time { min-width: 56px; font-weight: 600; color: var(--c); font-size: 15px; }
+.day-info { flex: 1; }
+.day-info h4 { font-size: 15px; margin-bottom: 4px; }
+.day-info p { font-size: 12px; color: var(--text-muted); }
+.day-card.done h4 { text-decoration: line-through; opacity: .55; }
+.day-card.overdue { border-left-color: var(--danger); }
+
+.check-btn {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: transparent;
+    border: 2px solid var(--text-muted);
+    color: transparent;
+    cursor: pointer; transition: all .3s;
+}
+.check-btn:hover { border-color: var(--accent-primary); }
+.check-btn.on { background: var(--accent-primary); border-color: var(--accent-primary); color: #000; }
+
+.badge-pend { background: rgba(245,158,11,0.15); color: var(--warning); }
+.badge-ok   { background: rgba(74,222,128,0.15); color: var(--accent-primary); }
+.badge-late { background: rgba(239,68,68,0.15); color: var(--danger); }
+.badge-auto { background: rgba(255,255,255,0.08); color: var(--text-muted); }
+
+.empty-state { text-align: center; color: var(--text-muted); padding: 60px 0; font-size: 14px; }
+.empty-state i { font-size: 32px; display: block; margin-bottom: 12px; color: var(--accent-secondary); }
+
+/* ---------- Modal ---------- */
+.modal-content.modal-lg { max-width: 480px; max-height: 92vh; overflow-y: auto; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.check-line { flex-direction: row !important; align-items: center; gap: 10px !important; }
+.check-line input { width: 18px; height: 18px; accent-color: var(--accent-primary); }
+.btn-danger {
+    margin-right: auto;
+    background: transparent;
+    border: 1px solid rgba(239,68,68,.4);
+    color: var(--danger);
+    padding: 8px 16px; border-radius: 8px; cursor: pointer;
+}
+.btn-danger:hover { background: rgba(239,68,68,.12); }
+
+/* ---------- Toast de lembrete ---------- */
+#toastBox { position: fixed; right: 24px; bottom: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 200; }
+.toast {
+    background: #132218;
+    border: 1px solid var(--accent-primary);
+    border-radius: 12px;
+    padding: 14px 18px;
+    max-width: 340px;
+    font-size: 13px;
+    box-shadow: var(--shadow-glass);
+    display: flex; gap: 12px; align-items: flex-start;
+}
+.toast i { color: var(--accent-primary); margin-top: 2px; }
+.toast.info i { color: var(--warning); }
+
+@media (max-width: 900px) {
+    .cal-cell { min-height: 80px; }
+    .cal-event span { display: none; }
+}

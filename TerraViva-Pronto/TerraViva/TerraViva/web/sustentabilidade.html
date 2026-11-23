@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraViva - Sustentabilidade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="sustentabilidade.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><i class="fa-solid fa-leaf"></i><span>TerraViva</span></div>
+        <ul class="nav-menu">
+            <li><a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="cultivos.html" class="nav-item"><i class="fa-solid fa-seedling"></i> Cultivos</a></li>
+            <li><a href="calendario.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendário</a></li>
+            <li><a href="clima.html" class="nav-item"><i class="fa-solid fa-cloud-sun-rain"></i> Clima</a></li>
+            <li><a href="estoque.html" class="nav-item"><i class="fa-solid fa-boxes-stacked"></i> Estoque</a></li>
+            <li><a href="financeiro.html" class="nav-item"><i class="fa-solid fa-sack-dollar"></i> Financeiro</a></li>
+            <li><a href="vendas.html" class="nav-item"><i class="fa-solid fa-cart-shopping"></i> Vendas</a></li>
+            <li><a href="atividades.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Atividades</a></li>
+            <li><a href="pragas.html" class="nav-item"><i class="fa-solid fa-bug"></i> Pragas</a></li>
+            <li><a href="sustentabilidade.html" class="nav-item active"><i class="fa-solid fa-recycle"></i> Sustentabilidade</a></li>
+        </ul>
+        <div class="user-profile-sidebar">
+            <div class="avatar" id="userAvatar">GA</div>
+            <div class="user-info"><h4 id="userName">Produtor</h4><p>Fazenda Esperança</p></div>
+            <i class="fa-solid fa-gear" style="margin-left:auto;color:var(--text-muted);cursor:pointer;" onclick="window.location.href='login.html'"></i>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="greeting">
+                <h1>Sustentabilidade</h1>
+                <p>Conhecimento, cuidado com os recursos naturais e evolução das práticas na propriedade.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-outline" onclick="abrirAba('indicadores')"><i class="fa-solid fa-chart-line"></i> Ver indicadores</button>
+                <button class="btn-primary" onclick="abrirRegistro()"><i class="fa-solid fa-plus"></i> Registrar prática</button>
+            </div>
+        </header>
+
+        <section class="sust-hero glass-panel">
+            <div class="hero-copy">
+                <span class="eyebrow"><i class="fa-solid fa-earth-americas"></i> Agricultura regenerativa na prática</span>
+                <h2>Cuidar da propriedade é cuidar do futuro da produção.</h2>
+                <p>Explore práticas, aprenda caminhos possíveis e registre as mudanças realizadas na sua propriedade. Cada realidade tem seu ritmo: comece pelo que faz sentido para o seu solo, sua água e suas culturas.</p>
+                <button class="hero-link" onclick="abrirAba('biblioteca')">Explorar boas práticas <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+                <div class="hero-circle circle-one"></div><div class="hero-circle circle-two"></div>
+                <i class="fa-solid fa-seedling hero-leaf leaf-one"></i>
+                <i class="fa-solid fa-leaf hero-leaf leaf-two"></i>
+                <i class="fa-solid fa-droplet hero-drop"></i>
+                <span class="hero-art-label">Solo vivo • Água • Biodiversidade</span>
+            </div>
+        </section>
+
+        <section class="kpi-grid sust-kpis">
+            <div class="glass-panel kpi-card"><div class="kpi-header"><span>Práticas registradas</span><i class="fa-solid fa-clipboard-check"></i></div><div class="kpi-value" id="kpiRegistros">0</div><div class="kpi-footer">Acompanhamentos na propriedade</div></div>
+            <div class="glass-panel kpi-card ok"><div class="kpi-header"><span>Práticas adotadas</span><i class="fa-solid fa-seedling"></i></div><div class="kpi-value" id="kpiAdotadas">0</div><div class="kpi-footer">Registros marcados como adotados</div></div>
+            <div class="glass-panel kpi-card warn"><div class="kpi-header"><span>Em planejamento</span><i class="fa-solid fa-list-check"></i></div><div class="kpi-value" id="kpiPlanejamento">0</div><div class="kpi-footer">Próximos passos da propriedade</div></div>
+            <div class="glass-panel kpi-card info"><div class="kpi-header"><span>Culturas cadastradas</span><i class="fa-solid fa-wheat-awn"></i></div><div class="kpi-value" id="kpiCulturas">0</div><div class="kpi-footer">Culturas distintas no módulo Cultivos</div></div>
+        </section>
+
+        <nav class="sust-tabs glass-panel" aria-label="Seções de sustentabilidade">
+            <button class="sust-tab active" data-aba="biblioteca" onclick="abrirAba('biblioteca')"><i class="fa-solid fa-book-open"></i> Boas práticas</button>
+            <button class="sust-tab" data-aba="orientacoes" onclick="abrirAba('orientacoes')"><i class="fa-solid fa-lightbulb"></i> Orientações</button>
+            <button class="sust-tab" data-aba="acompanhamento" onclick="abrirAba('acompanhamento')"><i class="fa-solid fa-clipboard-list"></i> Minha propriedade</button>
+            <button class="sust-tab" data-aba="indicadores" onclick="abrirAba('indicadores')"><i class="fa-solid fa-chart-pie"></i> Indicadores</button>
+        </nav>
+
+        <!-- A. Biblioteca de boas práticas -->
+        <section class="sust-pane active" id="pane-biblioteca">
+            <div class="section-intro">
+                <div><span class="section-kicker">A. CONHECIMENTO</span><h2>Biblioteca de boas práticas</h2><p>Conheça práticas que podem contribuir para sistemas agrícolas mais resilientes.</p></div>
+                <span class="count-pill" id="totalPraticas">8 práticas</span>
+            </div>
+            <div class="library-tools glass-panel">
+                <div class="search-box"><i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted);"></i><input type="search" id="buscaPratica" placeholder="Buscar prática, benefício ou tema..." oninput="renderBiblioteca()"></div>
+                <select class="filter-select" id="filtroCategoria" onchange="renderBiblioteca()">
+                    <option value="todas">Todas as categorias</option><option value="solo">Solo</option><option value="nutrientes">Nutrientes e resíduos</option><option value="agua">Água</option><option value="biodiversidade">Biodiversidade</option>
+                </select>
+            </div>
+            <div class="practice-grid" id="gradePraticas"></div>
+        </section>
+
+        <!-- B. Orientações sustentáveis -->
+        <section class="sust-pane" id="pane-orientacoes" hidden>
+            <div class="section-intro"><div><span class="section-kicker">B. APRENDIZADO</span><h2>Orientações sustentáveis</h2><p>Ideias práticas para planejar melhorias respeitando as condições locais.</p></div></div>
+            <div class="guides-grid" id="gradeOrientacoes"></div>
+            <div class="technical-note glass-panel"><i class="fa-solid fa-circle-info"></i><div><strong>Adapte à realidade da propriedade</strong><p>As recomendações dependem do tipo de solo, clima, relevo, disponibilidade de água e cultura. Para definir espécies, doses, preparo do solo ou intervenções estruturais, procure orientação de um profissional ou serviço de assistência técnica rural.</p></div></div>
+        </section>
+
+        <!-- C. Acompanhamento -->
+        <section class="sust-pane" id="pane-acompanhamento" hidden>
+            <div class="section-intro">
+                <div><span class="section-kicker">C. ACOMPANHAMENTO</span><h2>Práticas da minha propriedade</h2><p>Registre o que já é feito, o que está em planejamento e o que ainda não foi iniciado.</p></div>
+                <button class="btn-primary" onclick="abrirRegistro()"><i class="fa-solid fa-plus"></i> Nova prática</button>
+            </div>
+            <div class="tracker-summary" id="resumoAcompanhamento"></div>
+            <div class="glass-panel tracker-panel">
+                <div class="toolbar tracker-toolbar">
+                    <div class="search-box"><i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted);"></i><input type="search" id="buscaRegistro" placeholder="Buscar prática ou cultura..." oninput="renderAcompanhamento()"></div>
+                    <select class="filter-select" id="filtroStatusRegistro" onchange="renderAcompanhamento()"><option value="todos">Todos os status</option><option value="adotada">Adotada</option><option value="planejamento">Em planejamento</option><option value="nao_iniciada">Não iniciada</option></select>
+                </div>
+                <div class="table-wrap">
+                    <table class="tracker-table"><thead><tr><th>Prática</th><th>Área / cultura</th><th>Status</th><th>Data do registro</th><th>Observações</th><th>Ações</th></tr></thead><tbody id="tabelaRegistros"></tbody></table>
+                </div>
+                <div class="empty-state" id="vazioRegistros" hidden><i class="fa-solid fa-leaf"></i><strong>Nenhum acompanhamento registrado ainda.</strong><span>Comece registrando uma prática que já existe ou que pretende adotar.</span><button class="btn-primary" onclick="abrirRegistro()"><i class="fa-solid fa-plus"></i> Registrar primeira prática</button></div>
+            </div>
+        </section>
+
+        <!-- D. Indicadores -->
+        <section class="sust-pane" id="pane-indicadores" hidden>
+            <div class="section-intro"><div><span class="section-kicker">D. EVOLUÇÃO</span><h2>Indicadores da propriedade</h2><p>Uma visão dos registros realizados, sem atribuir nota ou certificação ambiental.</p></div><span class="informative-pill"><i class="fa-solid fa-chart-line"></i> Indicadores informativos</span></div>
+            <div class="indicator-grid">
+                <article class="glass-panel indicator-card"><div class="indicator-icon green"><i class="fa-solid fa-seedling"></i></div><div><span>Práticas adotadas</span><strong id="indAdotadas">0</strong><small>Práticas com status adotado</small></div></article>
+                <article class="glass-panel indicator-card"><div class="indicator-icon yellow"><i class="fa-solid fa-hourglass-half"></i></div><div><span>Em planejamento</span><strong id="indPlanejamento">0</strong><small>Práticas em fase de planejamento</small></div></article>
+                <article class="glass-panel indicator-card"><div class="indicator-icon blue"><i class="fa-solid fa-droplet"></i></div><div><span>Registros de água</span><strong id="indAgua">0</strong><small>Práticas de água adotadas</small></div></article>
+                <article class="glass-panel indicator-card"><div class="indicator-icon soil"><i class="fa-solid fa-mountain-sun"></i></div><div><span>Registros de solo</span><strong id="indSolo">0</strong><small>Práticas de solo adotadas</small></div></article>
+            </div>
+            <div class="glass-panel indicator-breakdown">
+                <div class="panel-header"><div class="panel-title"><i class="fa-solid fa-chart-column"></i> Acompanhamento por tema</div><span class="muted-caption">Práticas adotadas / práticas disponíveis</span></div>
+                <div id="barrasTemas" class="theme-bars"></div>
+            </div>
+            <div class="indicator-footnote"><i class="fa-solid fa-circle-info"></i><p>Os números refletem somente as informações registradas no TerraViva. Eles não medem, isoladamente, o desempenho ambiental da propriedade, não substituem avaliação técnica e não representam certificação de sustentabilidade.</p></div>
+        </section>
+
+        <section class="sources-panel glass-panel">
+            <div class="sources-heading"><i class="fa-solid fa-book-bookmark"></i><div><strong>Fontes técnicas para aprofundar</strong><span>Materiais de referência da Embrapa</span></div></div>
+            <div class="source-links">
+                <a href="https://www.embrapa.br/web/agencia-de-informacao-tecnologica/cultivos/milho/producao/rotacao-de-culturas" target="_blank" rel="noopener">Rotação de culturas <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                <a href="https://www.embrapa.br/web/agencia-de-informacao-tecnologica/cultivos/milho/producao/manejo-do-solo-e-adubacao/sistema-de-manejo-do-solo/plantio-direto" target="_blank" rel="noopener">Sistema de plantio direto <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                <a href="https://www.embrapa.br/web/hortalicas/hortalica-nao-e-so-salada/secoes/compostagem" target="_blank" rel="noopener">Compostagem <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                <a href="https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1070445/1/CartilhaManejoIrrigacao2edicao.pdf" target="_blank" rel="noopener">Manejo de irrigação para agricultura familiar <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+        </section>
+        <footer class="page-footer">TerraViva • Conhecimento para produzir e conservar.</footer>
+    </main>
+
+    <!-- Modal de conteúdo da biblioteca e orientações -->
+    <div class="modal-overlay" id="modalConteudo" onclick="fecharModalFora(event)">
+        <div class="modal-content content-modal" role="dialog" aria-modal="true" aria-labelledby="conteudoTitulo">
+            <div class="modal-header"><span id="conteudoCategoria" class="modal-kicker">BOA PRÁTICA</span><button class="icon-close" type="button" onclick="fecharConteudo()" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="content-modal-icon" id="conteudoIcone"><i class="fa-solid fa-leaf"></i></div>
+            <h2 id="conteudoTitulo">Título</h2>
+            <p class="content-lead" id="conteudoResumo"></p>
+            <div class="detail-block"><h3><i class="fa-solid fa-circle-check"></i> Como pode ajudar</h3><p id="conteudoBeneficios"></p></div>
+            <div class="detail-block"><h3><i class="fa-solid fa-list-ol"></i> Por onde começar</h3><ul id="conteudoPassos"></ul></div>
+            <div class="detail-block detail-warning"><h3><i class="fa-solid fa-triangle-exclamation"></i> Cuidados importantes</h3><p id="conteudoCuidados"></p></div>
+            <div class="modal-source" id="conteudoFonte"></div>
+            <div class="modal-footer"><button class="btn-secondary" onclick="fecharConteudo()">Fechar</button><button class="btn-primary" id="btnRegistrarDestaPratica"><i class="fa-solid fa-clipboard-check"></i> Registrar na propriedade</button></div>
+        </div>
+    </div>
+
+    <!-- Modal de registro -->
+    <div class="modal-overlay" id="modalRegistro" onclick="fecharRegistroFora(event)">
+        <div class="modal-content register-modal" role="dialog" aria-modal="true" aria-labelledby="tituloRegistro">
+            <div class="modal-header"><span id="tituloRegistro">Registrar prática sustentável</span><button class="icon-close" type="button" onclick="fecharRegistro()" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button></div>
+            <form id="formRegistro" onsubmit="salvarRegistro(event)">
+                <input type="hidden" id="registroId">
+                <div class="form-group"><label for="registroPratica">Prática</label><select id="registroPratica" required></select></div>
+                <div class="form-row">
+                    <div class="form-group"><label for="registroStatus">Situação atual</label><select id="registroStatus" required><option value="adotada">Adotada</option><option value="planejamento">Em planejamento</option><option value="nao_iniciada">Não iniciada</option></select></div>
+                    <div class="form-group"><label for="registroData">Data do registro</label><input type="date" id="registroData" required></div>
+                </div>
+                <div class="form-group"><label for="registroCultivo">Cultura ou área relacionada</label><select id="registroCultivo"><option value="">Toda a propriedade / sem cultura específica</option></select><small class="form-hint">As culturas são carregadas do módulo Cultivos.</small></div>
+                <div class="form-group"><label for="registroArea">Área ou local (opcional)</label><input type="text" id="registroArea" maxlength="100" placeholder="Ex.: Talhão 2, horta dos fundos"></div>
+                <div class="form-group"><label for="registroObservacoes">Observações</label><textarea id="registroObservacoes" rows="4" maxlength="1000" placeholder="Descreva como a prática é realizada ou o que falta para começar..."></textarea></div>
+                <div class="form-hint form-advice"><i class="fa-solid fa-circle-info"></i> O registro é um acompanhamento interno e não equivale a uma auditoria ou certificação.</div>
+                <div class="modal-footer"><button type="button" class="btn-secondary" onclick="fecharRegistro()">Cancelar</button><button type="submit" class="btn-primary"><i class="fa-solid fa-check"></i> Salvar registro</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastBox"></div>
+
+<script>
+    // =============================================
+    // DADOS, ESTADO E CONFIGURAÇÃO
+    // =============================================
+    const API_CULTIVOS = 'http://localhost:8080/api/cultivos';
+    const KEY_SUSTENTABILIDADE = 'terraviva_sustentabilidade';
+    const $ = id => document.getElementById(id);
+    let cultivos = [];
+    let registros = lerRegistros();
+    let praticaAtualDetalhe = null;
+
+    const praticas = [
+        {
+            id:'rotacao', titulo:'Rotação de culturas', categoria:'solo', categoriaNome:'Solo', icone:'fa-arrows-rotate', cor:'green',
+            resumo:'Planejar a alternância de espécies vegetais na mesma área ao longo dos ciclos de cultivo, evitando repetir continuamente a mesma cultura.',
+            beneficios:'A diversificação pode contribuir para a ciclagem de nutrientes, a cobertura do solo e o manejo de pragas, doenças e plantas espontâneas. Os resultados dependem das espécies e da sequência escolhida.',
+            passos:['Liste as culturas já produzidas e o histórico de cada talhão.','Planeje uma sequência com espécies de famílias botânicas e sistemas radiculares diferentes.','Considere época de plantio, mercado, água disponível e necessidades nutricionais.','Registre os resultados de cada ciclo para ajustar o planejamento.'],
+            cuidados:'A sequência precisa considerar doenças e pragas que podem atingir culturas da mesma família. A escolha das espécies deve ser adaptada à região e ao histórico da área.',
+            fonte:'Embrapa — Rotação de culturas', url:'https://www.embrapa.br/web/agencia-de-informacao-tecnologica/cultivos/milho/producao/rotacao-de-culturas', tags:['diversificação','manejo do solo','planejamento']
+        },
+        {
+            id:'plantio-direto', titulo:'Plantio direto e mínimo revolvimento', categoria:'solo', categoriaNome:'Solo', icone:'fa-layer-group', cor:'soil',
+            resumo:'Sistema de produção que reduz o revolvimento do solo e integra cobertura permanente e diversificação de espécies.',
+            beneficios:'Quando planejado como sistema, pode reduzir perdas de solo e água por erosão, preservar a estrutura e favorecer a atividade biológica. Não se resume apenas a semear sem arar.',
+            passos:['Avalie compactação, drenagem, declividade e condições do solo.','Planeje plantas de cobertura e rotação compatíveis com a região.','Reduza o revolvimento de forma tecnicamente orientada.','Mantenha cobertura e planeje o manejo de resíduos e da enxurrada.'],
+            cuidados:'A adoção exige planejamento do sistema, máquinas ou ferramentas adequadas e controle da erosão. Em algumas situações pode ser necessária intervenção técnica antes da implantação.',
+            fonte:'Embrapa — Sistema de plantio direto', url:'https://www.embrapa.br/web/agencia-de-informacao-tecnologica/cultivos/milho/producao/manejo-do-solo-e-adubacao/sistema-de-manejo-do-solo/plantio-direto', tags:['conservação','erosão','solo']
+        },
+        {
+            id:'cobertura', titulo:'Cobertura do solo', categoria:'solo', categoriaNome:'Solo', icone:'fa-leaf', cor:'green',
+            resumo:'Manter a superfície do solo protegida com plantas vivas ou resíduos vegetais, como palhada e restos de culturas.',
+            beneficios:'A cobertura reduz o impacto direto das gotas de chuva, ajuda a diminuir a evaporação e pode favorecer a infiltração de água e a matéria orgânica.',
+            passos:['Observe quais áreas ficam expostas entre os ciclos.','Avalie palhada disponível e plantas de cobertura adequadas ao clima.','Distribua os resíduos sem bloquear a emergência ou o desenvolvimento da cultura.','Acompanhe umidade, plantas espontâneas e decomposição da cobertura.'],
+            cuidados:'A espécie e a quantidade de cobertura precisam ser compatíveis com a cultura principal. Observe possíveis abrigos de pragas e doenças e evite transportar sementes ou materiais contaminados.',
+            fonte:'Embrapa — Manejo conservacionista e plantio direto', url:'https://www.atermaisdigital.cnptia.embrapa.br/web/mudancas-climaticas/mitigacao/manejo-conservacionista-do-solo-e-sistema-de-plantio-direto', tags:['palhada','umidade','erosão']
+        },
+        {
+            id:'compostagem', titulo:'Compostagem', categoria:'nutrientes', categoriaNome:'Nutrientes e resíduos', icone:'fa-recycle', cor:'green',
+            resumo:'Transformar resíduos orgânicos vegetais e animais em composto por meio de decomposição controlada.',
+            beneficios:'Ajuda a aproveitar resíduos da propriedade e pode produzir um material orgânico útil para o solo, reduzindo o descarte de matéria aproveitável.',
+            passos:['Separe resíduos orgânicos e materiais secos, evitando misturar plástico, vidro e outros rejeitos.','Escolha local adequado, com drenagem e acesso à água.','Monte a pilha ou leira equilibrando materiais ricos em carbono e nitrogênio.','Acompanhe umidade, aeração e temperatura durante o processo.','Utilize o composto após maturação e conforme análise e necessidade da cultura.'],
+            cuidados:'Compostagem exige controle de umidade, aeração e temperatura. Esterco e resíduos inadequadamente tratados podem apresentar riscos sanitários; não aplique material cru diretamente sem orientação.',
+            fonte:'Embrapa Hortaliças — Compostagem', url:'https://www.embrapa.br/web/hortalicas/hortalica-nao-e-so-salada/secoes/compostagem', tags:['resíduos','matéria orgânica','adubo']
+        },
+        {
+            id:'adubacao-organica', titulo:'Adubação orgânica', categoria:'nutrientes', categoriaNome:'Nutrientes e resíduos', icone:'fa-spa', cor:'soil',
+            resumo:'Utilizar materiais orgânicos, como composto maturado e estercos tratados, como parte do manejo da fertilidade.',
+            beneficios:'Pode contribuir para o aporte de matéria orgânica e nutrientes e para a melhoria de atributos físicos, químicos e biológicos do solo.',
+            passos:['Identifique os materiais disponíveis e sua origem.','Faça análise do solo e, quando necessário, caracterização do material orgânico.','Defina quantidade e momento de aplicação conforme a cultura e recomendação técnica.','Registre origem, quantidade, local e data da aplicação.'],
+            cuidados:'Adubos orgânicos têm composição variável. Doses inadequadas podem causar desequilíbrio nutricional, salinização ou contaminação; considere análise e orientação técnica.',
+            fonte:'Embrapa — Compostagem de resíduos orgânicos para uso na agricultura', url:'https://www.embrapa.br/web/agrobiologia/busca-de-solucoes-tecnologicas/-/produto-servico/129/compostagem-de-residuos-organicos-para-seu-uso-na-agricultura', tags:['fertilidade','nutrientes','matéria orgânica']
+        },
+        {
+            id:'diversificacao', titulo:'Diversificação de culturas', categoria:'biodiversidade', categoriaNome:'Biodiversidade', icone:'fa-seedling', cor:'green',
+            resumo:'Ampliar a variedade de espécies cultivadas na propriedade, no tempo ou no espaço, conforme as condições produtivas.',
+            beneficios:'Pode distribuir riscos de produção e renda, ampliar habitats e recursos para organismos benéficos e contribuir para sistemas agrícolas mais diversos.',
+            passos:['Mapeie as áreas, épocas disponíveis e objetivos de produção.','Avalie espécies adaptadas ao clima e ao solo local.','Considere consórcios ou escalonamento de plantios quando tecnicamente adequados.','Acompanhe custos, mercado, mão de obra e resposta das culturas.'],
+            cuidados:'Nem toda combinação de culturas é compatível. Avalie competição por luz, água e nutrientes, além de pragas e doenças compartilhadas.',
+            fonte:'Embrapa — Rotação de culturas', url:'https://www.embrapa.br/web/agencia-de-informacao-tecnologica/cultivos/milho/producao/rotacao-de-culturas', tags:['produção','biodiversidade','resiliência']
+        },
+        {
+            id:'agua', titulo:'Conservação e uso consciente da água', categoria:'agua', categoriaNome:'Água', icone:'fa-droplet', cor:'blue',
+            resumo:'Planejar o uso da água, reduzir perdas e ajustar a irrigação à necessidade das culturas e às condições do solo.',
+            beneficios:'O manejo adequado pode reduzir desperdícios, melhorar a eficiência da irrigação e ajudar a preservar a disponibilidade de água na propriedade.',
+            passos:['Observe a necessidade de água de cada cultura e as condições do solo.','Verifique vazamentos, conexões e uniformidade do sistema de irrigação.','Irrigue nos horários e quantidades adequados ao sistema e à cultura.','Registre consumo, tempo de irrigação e condições climáticas.','Avalie captação de chuva e armazenamento apenas quando houver estrutura segura e adequada.'],
+            cuidados:'A água armazenada ou captada precisa de proteção contra contaminação. A irrigação e eventuais estruturas de captação devem respeitar regras locais e recomendações técnicas.',
+            fonte:'Embrapa — Sistemas e manejo de irrigação de baixo custo para agricultura familiar', url:'https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1070445/1/CartilhaManejoIrrigacao2edicao.pdf', tags:['irrigação','captação','recursos hídricos']
+        },
+        {
+            id:'biodiversidade', titulo:'Preservação da biodiversidade', categoria:'biodiversidade', categoriaNome:'Biodiversidade', icone:'fa-tree', cor:'green',
+            resumo:'Reconhecer e conservar áreas naturais e elementos da paisagem que dão suporte à vida no entorno da produção.',
+            beneficios:'A vegetação nativa e os habitats associados podem abrigar polinizadores, inimigos naturais de pragas e outros organismos importantes para o equilíbrio ecológico.',
+            passos:['Identifique árvores, cercas vivas, cursos d’água e áreas de vegetação nativa.','Evite a remoção desnecessária de vegetação e o descarte de resíduos em áreas naturais.','Planeje corredores vegetados e locais de abrigo quando forem compatíveis com a propriedade.','Observe polinizadores e outros organismos sem interferir nos habitats.'],
+            cuidados:'A intervenção em áreas protegidas, nascentes e vegetação nativa pode estar sujeita à legislação ambiental. Consulte os órgãos competentes antes de realizar qualquer alteração.',
+            fonte:'Embrapa — Práticas de conservação do solo e da água', url:'https://www.embrapa.br/tema-conservacao-do-solo-e-da-agua', tags:['habitats','polinizadores','conservação']
+        }
+    ];
+
+    const orientacoes = [
+        {id:'saude-solo', titulo:'Como melhorar a saúde do solo', icone:'fa-mountain-sun', cor:'soil', resumo:'O solo é um recurso vivo. O manejo deve considerar sua estrutura, matéria orgânica, água e organismos.', pontos:['Mantenha o solo coberto sempre que possível.','Planeje rotação e diversificação de espécies.','Evite tráfego e operações que provoquem compactação em condições inadequadas.','Use análise de solo para orientar correções e adubações.'], cuidado:'Amostragem e interpretação de análise de solo devem seguir orientação técnica para cada área.'},
+        {id:'desperdicios', titulo:'Como reduzir desperdícios', icone:'fa-box-open', cor:'green', resumo:'Planejamento e registros ajudam a aproveitar melhor insumos, água, energia e produção colhida.', pontos:['Planeje compras de insumos de acordo com a necessidade real.','Armazene materiais corretamente e acompanhe validade.','Faça manutenção preventiva de equipamentos e sistemas de irrigação.','Separe resíduos orgânicos para compostagem quando houver condições adequadas.','Planeje colheita, armazenamento e escoamento para reduzir perdas.'], cuidado:'Não reutilize embalagens de produtos químicos para outros fins. Siga as regras de armazenamento e destinação aplicáveis.'},
+        {id:'recursos', titulo:'Uso consciente dos recursos naturais', icone:'fa-droplet', cor:'blue', resumo:'Acompanhar o uso de água e energia permite identificar perdas e oportunidades de melhoria.', pontos:['Registre períodos e duração da irrigação.','Inspecione tubulações, conexões e emissores.','Avalie a umidade do solo e as condições climáticas antes de irrigar.','Proteja fontes e reservatórios contra contaminação.'], cuidado:'A necessidade de água varia conforme cultura, fase de desenvolvimento, solo e clima. Evite adotar uma frequência fixa sem avaliação.'},
+        {id:'diversificar', titulo:'Como diversificar a produção', icone:'fa-seedling', cor:'green', resumo:'Diversificar pode envolver culturas diferentes em períodos distintos ou em sistemas consorciados.', pontos:['Conheça a demanda local e os canais de comercialização.','Escolha espécies adaptadas às condições da propriedade.','Planeje épocas de plantio para distribuir mão de obra e colheitas.','Considere rotação e consórcio somente após avaliar compatibilidade entre espécies.'], cuidado:'Diversificação exige planejamento financeiro, de mão de obra e manejo fitossanitário.'},
+        {id:'degradacao', titulo:'Como prevenir a degradação do solo', icone:'fa-shield', cor:'soil', resumo:'Erosão e compactação podem reduzir a capacidade produtiva e aumentar perdas de água e nutrientes.', pontos:['Mantenha cobertura vegetal ou palhada na superfície.','Planeje o tráfego de máquinas para reduzir compactação.','Avalie práticas de manejo da enxurrada conforme relevo e tipo de solo.','Evite deixar áreas inclinadas expostas por longos períodos.'], cuidado:'Curvas de nível, terraços e outras obras conservacionistas devem ser dimensionados por profissional habilitado.'}
+    ];
+
+    function escapar(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function normalizar(v) { return String(v ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
+    function hojeISO() { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+    function fmtData(s) { return s ? s.split('-').reverse().join('/') : '—'; }
+    function gerarId() { return 'sust-' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+    function lerRegistros() { try { const d=JSON.parse(localStorage.getItem(KEY_SUSTENTABILIDADE)||'[]'); return Array.isArray(d)?d:[]; } catch(e) { console.warn('Não foi possível ler os registros de sustentabilidade.',e); return []; } }
+    function salvarDados() { try { localStorage.setItem(KEY_SUSTENTABILIDADE,JSON.stringify(registros)); return true; } catch(e) { console.error(e); toast('Não foi possível salvar. Verifique o armazenamento do navegador.',true); return false; } }
+
+    function toast(msg, erro=false) {
+        const caixa=$('toastBox'); const item=document.createElement('div'); item.className='toast'+(erro?' erro':''); item.textContent=msg; caixa.appendChild(item); setTimeout(()=>item.remove(),3600);
+    }
+
+    function carregarUsuario() {
+        const nome=localStorage.getItem('usuarioLogado');
+        if(nome) { $('userName').textContent=nome; $('userAvatar').textContent=nome.split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase(); }
+    }
+
+    async function carregarCultivos() {
+        try {
+            const resposta=await fetch(API_CULTIVOS);
+            if(!resposta.ok) throw new Error('API indisponível');
+            const dados=await resposta.json(); cultivos=Array.isArray(dados)?dados:[];
+        } catch(e) { cultivos=[]; console.info('Cultivos indisponíveis; o módulo de sustentabilidade continuará funcionando.',e); }
+        preencherCultivos(); atualizarIndicadores();
+    }
+
+    function preencherCultivos() {
+        const select=$('registroCultivo');
+        select.innerHTML='<option value="">Toda a propriedade / sem cultura específica</option>';
+        cultivos.forEach(c=>{
+            const opt=document.createElement('option'); opt.value=String(c.id); opt.textContent=c.cultura || 'Cultura sem nome'; select.appendChild(opt);
+        });
+        $('kpiCulturas').textContent=new Set(cultivos.map(c=>normalizar(c.cultura)).filter(Boolean)).size;
+    }
+
+    // Navegação entre áreas da página
+    function abrirAba(nome) {
+        document.querySelectorAll('.sust-tab').forEach(b=>b.classList.toggle('active',b.dataset.aba===nome));
+        document.querySelectorAll('.sust-pane').forEach(p=>{ const ativa=p.id==='pane-'+nome; p.hidden=!ativa; p.classList.toggle('active',ativa); });
+        if(nome==='acompanhamento') renderAcompanhamento();
+        if(nome==='indicadores') atualizarIndicadores();
+        window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    // Biblioteca de práticas
+    function renderBiblioteca() {
+        const termo=normalizar($('buscaPratica').value); const cat=$('filtroCategoria').value;
+        const lista=praticas.filter(p=>{
+            const texto=normalizar([p.titulo,p.resumo,p.beneficios,p.categoriaNome,...p.tags].join(' '));
+            return (!termo||texto.includes(termo)) && (cat==='todas'||p.categoria===cat);
+        });
+        $('totalPraticas').textContent=`${lista.length} ${lista.length===1?'prática':'práticas'}`;
+        if(!lista.length) { $('gradePraticas').innerHTML='<div class="empty-state library-empty"><i class="fa-solid fa-magnifying-glass"></i><strong>Nenhuma prática encontrada.</strong><span>Tente outro termo ou categoria.</span></div>'; return; }
+        $('gradePraticas').innerHTML=lista.map(p=>`
+            <article class="practice-card glass-panel">
+                <div class="practice-card-top"><span class="practice-icon ${p.cor}"><i class="fa-solid ${p.icone}"></i></span><span class="practice-category">${escapar(p.categoriaNome)}</span></div>
+                <h3>${escapar(p.titulo)}</h3><p>${escapar(p.resumo)}</p>
+                <div class="practice-tags">${p.tags.slice(0,2).map(t=>`<span>${escapar(t)}</span>`).join('')}</div>
+                <button type="button" class="text-action" onclick="abrirConteudoPratica('${p.id}')">Conhecer prática <i class="fa-solid fa-arrow-right"></i></button>
+            </article>`).join('');
+    }
+
+    // Orientações temáticas
+    function renderOrientacoes() {
+        $('gradeOrientacoes').innerHTML=orientacoes.map(o=>`
+            <article class="guide-card glass-panel">
+                <div class="guide-icon ${o.cor}"><i class="fa-solid ${o.icone}"></i></div>
+                <div class="guide-content"><span class="guide-label">ORIENTAÇÃO</span><h3>${escapar(o.titulo)}</h3><p>${escapar(o.resumo)}</p>
+                    <ul>${o.pontos.slice(0,3).map(p=>`<li>${escapar(p)}</li>`).join('')}</ul>
+                    <button class="text-action" type="button" onclick="abrirOrientacao('${o.id}')">Ver orientação completa <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </article>`).join('');
+    }
+
+    function abrirConteudoPratica(id) {
+        const p=praticas.find(x=>x.id===id); if(!p) return;
+        praticaAtualDetalhe=p;
+        $('conteudoCategoria').textContent=p.categoriaNome.toUpperCase(); $('conteudoTitulo').textContent=p.titulo; $('conteudoResumo').textContent=p.resumo;
+        $('conteudoIcone').innerHTML=`<i class="fa-solid ${p.icone}"></i>`; $('conteudoIcone').className='content-modal-icon '+p.cor;
+        $('conteudoBeneficios').textContent=p.beneficios; $('conteudoCuidados').textContent=p.cuidados;
+        $('conteudoPassos').innerHTML=p.passos.map(x=>`<li>${escapar(x)}</li>`).join('');
+        $('conteudoFonte').innerHTML=`<i class="fa-solid fa-book"></i> Referência: <a href="${p.url}" target="_blank" rel="noopener">${escapar(p.fonte)} <i class="fa-solid fa-arrow-up-right-from-square"></i></a>`;
+        $('btnRegistrarDestaPratica').onclick=()=>{fecharConteudo();abrirRegistro(p.id);};
+        $('modalConteudo').style.display='flex'; document.body.classList.add('modal-open');
+    }
+
+    function abrirOrientacao(id) {
+        const o=orientacoes.find(x=>x.id===id); if(!o) return;
+        $('conteudoCategoria').textContent='ORIENTAÇÃO SUSTENTÁVEL'; $('conteudoTitulo').textContent=o.titulo; $('conteudoResumo').textContent=o.resumo;
+        $('conteudoIcone').innerHTML=`<i class="fa-solid ${o.icone}"></i>`; $('conteudoIcone').className='content-modal-icon '+o.cor;
+        $('conteudoBeneficios').textContent='Pequenas ações acompanhadas ao longo do tempo ajudam a identificar oportunidades de melhoria e a tomar decisões mais conscientes.';
+        $('conteudoPassos').innerHTML=o.pontos.map(x=>`<li>${escapar(x)}</li>`).join(''); $('conteudoCuidados').textContent=o.cuidado;
+        $('conteudoFonte').innerHTML='<span class="source-muted">Consulte as referências técnicas ao final desta página e adapte as orientações às condições locais.</span>';
+        $('btnRegistrarDestaPratica').style.display='none'; $('modalConteudo').style.display='flex'; document.body.classList.add('modal-open');
+    }
+    function fecharConteudo() { $('modalConteudo').style.display='none'; document.body.classList.remove('modal-open'); $('btnRegistrarDestaPratica').style.display='inline-flex'; }
+    function fecharModalFora(e) { if(e.target===$('modalConteudo')) fecharConteudo(); }
+
+    // Registros da propriedade
+    function statusTexto(s) { return ({adotada:'Adotada',planejamento:'Em planejamento',nao_iniciada:'Não iniciada'})[s] || 'Não informado'; }
+    function statusClasse(s) { return ({adotada:'status-adotada',planejamento:'status-planejamento',nao_iniciada:'status-nao-iniciada'})[s] || 'status-nao-iniciada'; }
+    function preencherSelectPraticas() { $('registroPratica').innerHTML=praticas.map(p=>`<option value="${p.id}">${escapar(p.titulo)}</option>`).join(''); }
+
+    function abrirRegistro(praticaId='', registroId='') {
+        preencherSelectPraticas(); $('formRegistro').reset(); $('registroId').value=''; $('registroData').value=hojeISO(); $('tituloRegistro').textContent='Registrar prática sustentável';
+        preencherCultivos();
+        if(registroId) {
+            const r=registros.find(x=>x.id===registroId); if(!r) return;
+            $('registroId').value=r.id; $('tituloRegistro').textContent='Editar registro'; $('registroPratica').value=r.praticaId; $('registroStatus').value=r.status;
+            $('registroData').value=r.dataRegistro||hojeISO(); $('registroCultivo').value=r.cultivoId||''; $('registroArea').value=r.area||''; $('registroObservacoes').value=r.observacoes||'';
+        } else if(praticaId) { $('registroPratica').value=praticaId; }
+        $('modalRegistro').style.display='flex'; document.body.classList.add('modal-open');
+    }
+    function fecharRegistro() { $('modalRegistro').style.display='none'; document.body.classList.remove('modal-open'); $('formRegistro').reset(); }
+    function fecharRegistroFora(e) { if(e.target===$('modalRegistro')) fecharRegistro(); }
+
+    function salvarRegistro(e) {
+        e.preventDefault();
+        const praticaId=$('registroPratica').value; const cId=$('registroCultivo').value;
+        const cultivo=cultivos.find(c=>String(c.id)===String(cId));
+        const dados={praticaId,status:$('registroStatus').value,dataRegistro:$('registroData').value,cultivoId:cId||'',cultura:cultivo?.cultura||'',area:$('registroArea').value.trim(),observacoes:$('registroObservacoes').value.trim()};
+        const id=$('registroId').value;
+        if(id) {
+            const i=registros.findIndex(r=>r.id===id); if(i>=0) registros[i]={...registros[i],...dados};
+        } else {
+            // Evita duplicar o mesmo acompanhamento para a mesma prática e cultura.
+            const existente=registros.find(r=>r.praticaId===praticaId && String(r.cultivoId||'')===String(cId||''));
+            if(existente) Object.assign(existente,dados);
+            else registros.push({id:gerarId(),...dados});
+        }
+        if(!salvarDados()) return;
+        fecharRegistro(); renderAcompanhamento(); atualizarIndicadores(); toast('Prática registrada com sucesso.');
+    }
+
+    function renderAcompanhamento() {
+        const termo=normalizar($('buscaRegistro').value); const filtro=$('filtroStatusRegistro').value;
+        const lista=registros.filter(r=>{
+            const p=praticas.find(x=>x.id===r.praticaId); const texto=normalizar([p?.titulo,r.cultura,r.area,r.observacoes].join(' '));
+            return (!termo||texto.includes(termo)) && (filtro==='todos'||r.status===filtro);
+        }).sort((a,b)=>(b.dataRegistro||'').localeCompare(a.dataRegistro||''));
+        $('resumoAcompanhamento').innerHTML=`<div class="tracker-mini"><span>Adotadas</span><strong>${registros.filter(r=>r.status==='adotada').length}</strong></div><div class="tracker-mini"><span>Em planejamento</span><strong>${registros.filter(r=>r.status==='planejamento').length}</strong></div><div class="tracker-mini"><span>Não iniciadas</span><strong>${registros.filter(r=>r.status==='nao_iniciada').length}</strong></div>`;
+        $('tabelaRegistros').innerHTML=lista.map(r=>{
+            const p=praticas.find(x=>x.id===r.praticaId); const area=[r.area,r.cultura].filter(Boolean).join(' • ')||'Toda a propriedade';
+            return `<tr><td><strong>${escapar(p?.titulo||'Prática removida')}</strong><small class="table-sub">${escapar(p?.categoriaNome||'')}</small></td><td>${escapar(area)}</td><td><span class="status-pill ${statusClasse(r.status)}">${statusTexto(r.status)}</span></td><td>${fmtData(r.dataRegistro)}</td><td class="observation-cell">${escapar(r.observacoes||'—')}</td><td><div class="row-actions"><button class="btn-mini" title="Editar" onclick="abrirRegistro('', '${r.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-mini danger" title="Excluir" onclick="excluirRegistro('${r.id}')"><i class="fa-regular fa-trash-can"></i></button></div></td></tr>`;
+        }).join('');
+        $('vazioRegistros').hidden=lista.length>0; $('tabelaRegistros').parentElement.parentElement.style.display=lista.length?'':'none';
+        if(!registros.length) $('vazioRegistros').hidden=false;
+    }
+
+    function excluirRegistro(id) {
+        const r=registros.find(x=>x.id===id); if(!r) return;
+        if(!confirm('Deseja excluir este registro de sustentabilidade?')) return;
+        registros=registros.filter(x=>x.id!==id); if(salvarDados()) {renderAcompanhamento();atualizarIndicadores();toast('Registro excluído.');}
+    }
+
+    // Indicadores descritivos: não há cálculo de nota ou certificação.
+    function atualizarIndicadores() {
+        const unicos=tipo=>new Set(registros.filter(r=>r.status===tipo).map(r=>r.praticaId)).size;
+        const adotadas=unicos('adotada'), planejamento=unicos('planejamento');
+        const culturas=new Set(cultivos.map(c=>normalizar(c.cultura)).filter(Boolean)).size;
+        $('kpiRegistros').textContent=registros.length; $('kpiAdotadas').textContent=adotadas; $('kpiPlanejamento').textContent=planejamento; $('kpiCulturas').textContent=culturas;
+        $('indAdotadas').textContent=adotadas; $('indPlanejamento').textContent=planejamento;
+        $('indAgua').textContent=new Set(registros.filter(r=>r.status==='adotada'&&praticas.find(p=>p.id===r.praticaId)?.categoria==='agua').map(r=>r.praticaId)).size;
+        $('indSolo').textContent=new Set(registros.filter(r=>r.status==='adotada'&&praticas.find(p=>p.id===r.praticaId)?.categoria==='solo').map(r=>r.praticaId)).size;
+        const temas=[{id:'solo',nome:'Solo',total:praticas.filter(p=>p.categoria==='solo').length},{id:'nutrientes',nome:'Nutrientes e resíduos',total:praticas.filter(p=>p.categoria==='nutrientes').length},{id:'agua',nome:'Água',total:praticas.filter(p=>p.categoria==='agua').length},{id:'biodiversidade',nome:'Biodiversidade',total:praticas.filter(p=>p.categoria==='biodiversidade').length}];
+        $('barrasTemas').innerHTML=temas.map(t=>{
+            const adotadasTema=new Set(registros.filter(r=>r.status==='adotada'&&praticas.find(p=>p.id===r.praticaId)?.categoria===t.id).map(r=>r.praticaId)).size;
+            const pct=t.total?Math.round(adotadasTema/t.total*100):0;
+            return `<div class="theme-bar-row"><div class="theme-bar-label"><span>${t.nome}</span><strong>${adotadasTema} de ${t.total}</strong></div><div class="theme-bar-track"><div class="theme-bar-fill ${t.id}" style="width:${pct}%"></div></div></div>`;
+        }).join('');
+    }
+
+    // Inicialização
+    carregarUsuario(); renderBiblioteca(); renderOrientacoes(); preencherSelectPraticas(); renderAcompanhamento(); atualizarIndicadores(); carregarCultivos();
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'){fecharConteudo();fecharRegistro();}});
+</script>
+</body>
+</html>

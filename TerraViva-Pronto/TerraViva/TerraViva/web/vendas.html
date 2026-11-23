@@ -1,0 +1,1095 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TerraViva - Vendas</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="vendas.css">
+</head>
+
+<body>
+
+    <!-- MENU LATERAL -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <i class="fa-solid fa-leaf"></i>
+            <span>TerraViva</span>
+        </div>
+
+        <ul class="nav-menu">
+            <li><a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="cultivos.html" class="nav-item"><i class="fa-solid fa-seedling"></i> Cultivos</a></li>
+            <li><a href="calendario.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendário</a></li>
+            <li><a href="clima.html" class="nav-item"><i class="fa-solid fa-cloud-sun-rain"></i> Clima</a></li>
+            <li><a href="estoque.html" class="nav-item"><i class="fa-solid fa-boxes-stacked"></i> Estoque</a></li>
+            <li><a href="financeiro.html" class="nav-item"><i class="fa-solid fa-sack-dollar"></i> Financeiro</a></li>
+            <li><a href="vendas.html" class="nav-item active"><i class="fa-solid fa-cart-shopping"></i> Vendas</a></li>
+            <li><a href="atividades.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Atividades</a></li>
+            <li><a href="pragas.html" class="nav-item"><i class="fa-solid fa-bug"></i> Pragas</a></li>
+            <li><a href="sustentabilidade.html" class="nav-item"><i class="fa-solid fa-recycle"></i> Sustentabilidade</a></li>
+        </ul>
+
+        <div class="user-profile-sidebar">
+            <div class="avatar" id="userAvatar">GA</div>
+
+            <div class="user-info">
+                <h4 id="userName">Produtor</h4>
+                <p>Fazenda Esperança</p>
+            </div>
+
+            <i class="fa-solid fa-gear"
+               style="margin-left:auto;color:var(--text-muted);cursor:pointer;"
+               onclick="window.location.href='login.html'"></i>
+        </div>
+
+    </aside>
+
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content">
+
+        <header class="top-header">
+
+            <div class="greeting">
+                <h1>Gestão de Vendas</h1>
+                <p>Controle a comercialização dos seus produtos agrícolas.</p>
+            </div>
+
+            <div class="header-actions">
+
+                <button class="btn-outline" onclick="abrirCliente()">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Novo Cliente
+                </button>
+
+                <button class="btn-primary" onclick="abrirVenda()">
+                    <i class="fa-solid fa-plus"></i>
+                    Registrar Venda
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- INDICADORES -->
+        <section class="kpi-grid">
+
+            <div class="glass-panel kpi-card">
+                <div class="kpi-header">
+                    <span>Total vendido</span>
+                    <i class="fa-solid fa-sack-dollar"></i>
+                </div>
+
+                <div class="kpi-value" id="kpiVendido">R$ 0,00</div>
+
+                <div class="kpi-footer">Valor comercializado</div>
+            </div>
+
+
+            <div class="glass-panel kpi-card ok">
+                <div class="kpi-header">
+                    <span>Recebido</span>
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+
+                <div class="kpi-value" id="kpiRecebido">R$ 0,00</div>
+
+                <div class="kpi-footer">Vendas pagas</div>
+            </div>
+
+
+            <div class="glass-panel kpi-card warn">
+                <div class="kpi-header">
+                    <span>A receber</span>
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+
+                <div class="kpi-value" id="kpiPendente">R$ 0,00</div>
+
+                <div class="kpi-footer">Vendas pendentes</div>
+            </div>
+
+
+            <div class="glass-panel kpi-card">
+                <div class="kpi-header">
+                    <span>Quantidade de vendas</span>
+                    <i class="fa-solid fa-basket-shopping"></i>
+                </div>
+
+                <div class="kpi-value" id="kpiQuantidade">0</div>
+
+                <div class="kpi-footer">Vendas registradas</div>
+            </div>
+
+        </section>
+
+
+        <!-- HISTÓRICO DE VENDAS -->
+        <section class="glass-panel content-panel">
+
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa-solid fa-clock-rotate-left"
+                       style="color:var(--accent-primary);"></i>
+                    Histórico de vendas
+                </div>
+            </div>
+
+
+            <!-- FILTROS -->
+            <div class="toolbar">
+
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"
+                       style="color:var(--text-muted);"></i>
+
+                    <input
+                        type="text"
+                        id="buscaVenda"
+                        placeholder="Buscar cliente ou produto..."
+                        oninput="renderVendas()">
+                </div>
+
+
+                <div class="search-box">
+
+                    <select class="filter-select"
+                            id="filtroStatus"
+                            onchange="renderVendas()">
+
+                        <option value="todos">Todas as vendas</option>
+                        <option value="pago">Pagas</option>
+                        <option value="pendente">Pendentes</option>
+
+                    </select>
+
+
+                    <select class="filter-select"
+                            id="filtroCultura"
+                            onchange="renderVendas()">
+
+                        <option value="todas">Todas as culturas</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- TABELA -->
+            <div class="table-wrap" id="areaTabela">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Cliente</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Total</th>
+                            <th>Pagamento</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabelaVendas">
+
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    Nenhuma venda registrada.
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- MODAL: REGISTRAR VENDA -->
+    <div class="modal-overlay" id="modalVenda">
+
+        <div class="modal-content modal-lg modal-venda">
+
+            <div class="modal-header">
+                <span id="tituloModalVenda">Registrar nova venda</span>
+
+                <i class="fa-solid fa-xmark"
+                   onclick="fecharModais()"></i>
+            </div>
+
+
+            <form id="formVenda" onsubmit="salvarVenda(event)">
+
+                <input type="hidden" id="vId">
+
+
+                <div class="form-group">
+                    <label for="vCliente">Cliente</label>
+
+                    <div class="campo-cliente">
+                        <select id="vCliente" required>
+                            <option value="">Selecione um cliente</option>
+                        </select>
+
+                        <button type="button"
+                                class="btn-add-cliente"
+                                onclick="abrirCliente()">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="vProduto">Produto vendido</label>
+
+                    <select id="vProduto"
+                            required
+                            onchange="atualizarProdutoVenda()">
+
+                        <option value="">Selecione um produto do estoque</option>
+
+                    </select>
+
+                    <div class="form-hint" id="vEstoqueDisponivel">
+                        Selecione um produto para consultar o estoque disponível.
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="vCultura">Cultura</label>
+
+                    <input
+                        type="text"
+                        id="vCultura"
+                        list="listaCulturas"
+                        placeholder="Ex: Tomate">
+
+                    <datalist id="listaCulturas"></datalist>
+
+                    <div class="form-hint">
+                        Associe a venda a uma cultura para consultar o histórico.
+                    </div>
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="vQuantidade">Quantidade</label>
+
+                        <input
+                            type="number"
+                            id="vQuantidade"
+                            required
+                            min="0.001"
+                            step="0.001"
+                            placeholder="0"
+                            oninput="calcularTotal()">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="vPreco">Preço unitário (R$)</label>
+
+                        <input
+                            type="number"
+                            id="vPreco"
+                            required
+                            min="0.01"
+                            step="0.01"
+                            placeholder="0,00"
+                            oninput="calcularTotal()">
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+                    <label for="vTotal">Valor total da venda</label>
+
+                    <input
+                        type="text"
+                        id="vTotal"
+                        value="R$ 0,00"
+                        readonly>
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="vData">Data da venda</label>
+
+                        <input type="date" id="vData" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="vPagamento">Forma de pagamento</label>
+
+                        <select id="vPagamento" required>
+                            <option value="">Selecione</option>
+                            <option value="Pix">Pix</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                            <option value="Cartão">Cartão</option>
+                            <option value="Transferência">Transferência</option>
+                            <option value="A prazo">A prazo</option>
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+                    <label for="vStatus">Situação do pagamento</label>
+
+                    <select id="vStatus" required>
+                        <option value="pendente">Pendente</option>
+                        <option value="pago">Pago</option>
+                    </select>
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn-secondary"
+                            onclick="fecharModais()">
+                        Cancelar
+                    </button>
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-check"></i>
+                        Salvar venda
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL: CADASTRAR CLIENTE -->
+    <div class="modal-overlay" id="modalCliente">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <span>Cadastrar cliente</span>
+
+                <i class="fa-solid fa-xmark"
+                   onclick="fecharModais()"></i>
+            </div>
+
+
+            <form id="formCliente" onsubmit="salvarCliente(event)">
+
+                <div class="form-group">
+                    <label for="cNome">Nome do cliente</label>
+
+                    <input
+                        type="text"
+                        id="cNome"
+                        required
+                        placeholder="Ex: Mercado do João">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="cTelefone">Telefone</label>
+
+                    <input
+                        type="tel"
+                        id="cTelefone"
+                        placeholder="(00) 00000-0000">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="cEmail">E-mail</label>
+
+                    <input
+                        type="email"
+                        id="cEmail"
+                        placeholder="cliente@email.com">
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn-secondary"
+                            onclick="fecharModais()">
+                        Cancelar
+                    </button>
+
+                    <button type="submit" class="btn-primary">
+                        Cadastrar cliente
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL: REGISTRAR RECEBIMENTO -->
+    <div class="modal-overlay" id="modalRecebimento">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <span>Registrar recebimento</span>
+
+                <i class="fa-solid fa-xmark"
+                   onclick="fecharModais()"></i>
+            </div>
+
+
+            <form id="formRecebimento" onsubmit="salvarRecebimento(event)">
+
+                <input type="hidden" id="recebimentoId">
+
+                <p id="resumoRecebimento"></p>
+
+                <div class="form-group">
+                    <label for="dataRecebimento">Data do recebimento</label>
+
+                    <input type="date" id="dataRecebimento" required>
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn-secondary"
+                            onclick="fecharModais()">
+                        Cancelar
+                    </button>
+
+                    <button type="submit" class="btn-primary">
+                        Confirmar recebimento
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div id="toastBox"></div>
+
+
+    
+
+
+<script>
+    // ==========================================
+    // CONFIGURAÇÕES E DADOS
+    // ==========================================
+
+    const KEY_CLIENTES = 'terraviva_clientes';
+    const KEY_VENDAS = 'terraviva_vendas';
+    const KEY_ESTOQUE = 'terraviva_estoque';
+    const KEY_MOVS = 'terraviva_movimentacoes';
+    const KEY_FIN = 'terraviva_financeiro';
+
+    const $ = id => document.getElementById(id);
+
+    let clientes = [];
+    let vendas = [];
+    let itensEstoque = [];
+    let movimentacoes = [];
+    let lancamentosFinanceiros = [];
+
+    function lerDados(chave) {
+        try {
+            const dados = JSON.parse(localStorage.getItem(chave));
+            return Array.isArray(dados) ? dados : [];
+        } catch {
+            return [];
+        }
+    }
+
+    function carregarDados() {
+        clientes = lerDados(KEY_CLIENTES);
+        vendas = lerDados(KEY_VENDAS);
+        itensEstoque = lerDados(KEY_ESTOQUE);
+        movimentacoes = lerDados(KEY_MOVS);
+        lancamentosFinanceiros = lerDados(KEY_FIN);
+    }
+
+    function salvarDados() {
+        localStorage.setItem(KEY_CLIENTES, JSON.stringify(clientes));
+        localStorage.setItem(KEY_VENDAS, JSON.stringify(vendas));
+        localStorage.setItem(KEY_ESTOQUE, JSON.stringify(itensEstoque));
+        localStorage.setItem(KEY_MOVS, JSON.stringify(movimentacoes));
+        localStorage.setItem(KEY_FIN, JSON.stringify(lancamentosFinanceiros));
+    }
+
+    function gerarId() {
+        return Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
+    }
+
+    function moeda(valor) {
+        return Number(valor || 0).toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+    }
+
+    function dataHoje() {
+        const d = new Date();
+        return [
+            d.getFullYear(),
+            String(d.getMonth() + 1).padStart(2, '0'),
+            String(d.getDate()).padStart(2, '0')
+        ].join('-');
+    }
+
+    function toast(mensagem, erro = false) {
+        const caixa = $('toastBox');
+
+        if (!caixa) {
+            alert(mensagem);
+            return;
+        }
+
+        const aviso = document.createElement('div');
+        aviso.className = erro ? 'toast erro' : 'toast';
+        aviso.textContent = mensagem;
+
+        caixa.appendChild(aviso);
+        setTimeout(() => aviso.remove(), 4000);
+    }
+
+
+    // ==========================================
+    // CLIENTES
+    // ==========================================
+
+    function abrirCliente() {
+        $('formCliente').reset();
+        $('modalCliente').style.display = 'flex';
+    }
+
+    function salvarCliente(event) {
+        event.preventDefault();
+
+        carregarDados();
+
+        const nome = $('cNome').value.trim();
+        const telefone = $('cTelefone').value.trim();
+        const email = $('cEmail').value.trim();
+
+        if (!nome) {
+            toast('Informe o nome do cliente.', true);
+            return;
+        }
+
+        const novoCliente = {
+            id: gerarId(),
+            nome,
+            telefone,
+            email
+        };
+
+        clientes.push(novoCliente);
+
+        salvarDados();
+
+        preencherClientes(novoCliente.id);
+
+        $('modalCliente').style.display = 'none';
+
+        toast('Cliente cadastrado com sucesso!');
+    }
+
+    function preencherClientes(selecionado = '') {
+        const select = $('vCliente');
+
+        select.innerHTML = '<option value="">Selecione um cliente</option>';
+
+        clientes.forEach(cliente => {
+            const option = document.createElement('option');
+
+            option.value = cliente.id;
+            option.textContent = cliente.nome;
+
+            select.appendChild(option);
+        });
+
+        if (selecionado) {
+            select.value = selecionado;
+        }
+    }
+
+
+    // ==========================================
+    // PRODUTOS DO ESTOQUE
+    // ==========================================
+
+    function preencherProdutos() {
+        const select = $('vProduto');
+
+        const produtos = itensEstoque.filter(item =>
+            item.categoria === 'colhidos' &&
+            Number(item.quantidade) > 0
+        );
+
+        select.innerHTML = '<option value="">Selecione um produto</option>';
+
+        produtos.forEach(produto => {
+            const option = document.createElement('option');
+
+            option.value = produto.id;
+
+            option.textContent =
+                `${produto.nome} - ${produto.quantidade} ${produto.unidade || 'un'}`;
+
+            select.appendChild(option);
+        });
+    }
+
+    function atualizarProdutoVenda() {
+        const produto = itensEstoque.find(item =>
+            String(item.id) === String($('vProduto').value)
+        );
+
+        if (!produto) {
+            $('vEstoqueDisponivel').textContent =
+                'Selecione um produto para consultar o estoque disponível.';
+
+            return;
+        }
+
+        $('vEstoqueDisponivel').textContent =
+            `Disponível: ${produto.quantidade} ${produto.unidade || 'un'}`;
+
+        $('vQuantidade').max = produto.quantidade;
+
+        calcularTotal();
+    }
+
+
+    // ==========================================
+    // REGISTRAR VENDA
+    // ==========================================
+
+    function abrirVenda() {
+        carregarDados();
+
+        $('formVenda').reset();
+
+        $('vData').value = dataHoje();
+        $('vStatus').value = 'pendente';
+        $('vTotal').value = moeda(0);
+
+        preencherClientes();
+        preencherProdutos();
+
+        $('vEstoqueDisponivel').textContent =
+            'Selecione um produto para consultar o estoque disponível.';
+
+        $('modalVenda').style.display = 'flex';
+    }
+
+    function calcularTotal() {
+        const quantidade = Number($('vQuantidade').value) || 0;
+        const preco = Number($('vPreco').value) || 0;
+
+        $('vTotal').value = moeda(quantidade * preco);
+    }
+
+    function salvarVenda(event) {
+        event.preventDefault();
+
+        carregarDados();
+
+        const cliente = clientes.find(item =>
+            String(item.id) === String($('vCliente').value)
+        );
+
+        const produto = itensEstoque.find(item =>
+            String(item.id) === String($('vProduto').value)
+        );
+
+        const quantidade = Number($('vQuantidade').value);
+        const preco = Number($('vPreco').value);
+        const data = $('vData').value;
+        const pagamento = $('vPagamento').value;
+        const status = $('vStatus').value;
+        const cultura = $('vCultura').value.trim();
+
+        if (!cliente) {
+            toast('Selecione um cliente.', true);
+            return;
+        }
+
+        if (!produto || produto.categoria !== 'colhidos') {
+            toast('Selecione um produto colhido do estoque.', true);
+            return;
+        }
+
+        if (quantidade <= 0 || preco <= 0) {
+            toast('Informe quantidade e preço válidos.', true);
+            return;
+        }
+
+        if (quantidade > Number(produto.quantidade)) {
+            toast('Quantidade maior que o estoque disponível!', true);
+            return;
+        }
+
+        if (!data || !pagamento) {
+            toast('Preencha a data e o pagamento.', true);
+            return;
+        }
+
+        const total = Math.round(quantidade * preco * 100) / 100;
+
+        const vendaId = gerarId();
+
+        const novaVenda = {
+            id: vendaId,
+            clienteId: cliente.id,
+            cliente: cliente.nome,
+            produtoId: produto.id,
+            produto: produto.nome,
+            categoria: produto.categoria,
+            quantidade,
+            unidade: produto.unidade || 'un',
+            precoUnitario: preco,
+            total,
+            valorTotal: total,
+            cultura,
+            data,
+            formaPagamento: pagamento,
+            status,
+            dataPagamento: status === 'pago' ? data : ''
+        };
+
+        // BAIXA NO ESTOQUE
+        produto.quantidade =
+            Number(produto.quantidade) - quantidade;
+
+        // REGISTRA MOVIMENTAÇÃO
+        movimentacoes.push({
+            id: gerarId(),
+            itemId: produto.id,
+            itemNome: produto.nome,
+            unidade: produto.unidade,
+            tipo: 'saida',
+            quantidade,
+            delta: -quantidade,
+            saldoApos: produto.quantidade,
+            data,
+            motivo: `Venda para ${cliente.nome}`,
+            origem: 'venda'
+        });
+
+        // REGISTRA VENDA
+        vendas.push(novaVenda);
+
+        // REGISTRA RECEITA NO FINANCEIRO
+        lancamentosFinanceiros.push({
+            id: gerarId(),
+            tipo: 'receita',
+            descricao: `Venda: ${produto.nome} - ${cliente.nome}`,
+            categoria: 'venda_produtos',
+            valor: total,
+            cultura,
+            data,
+            vencimento: data,
+            dataPagamento: novaVenda.dataPagamento,
+            vendaId,
+            origem: 'venda'
+        });
+
+        salvarDados();
+
+        fecharModais();
+        renderVendas();
+
+        toast('Venda registrada com sucesso!');
+    }
+
+
+    // ==========================================
+    // HISTÓRICO E INDICADORES
+    // ==========================================
+
+    function renderVendas() {
+        carregarDados();
+
+        const busca = $('buscaVenda').value.toLowerCase();
+        const statusFiltro = $('filtroStatus').value;
+        const culturaFiltro = $('filtroCultura').value;
+
+        let filtradas = vendas.filter(venda => {
+            const texto =
+                `${venda.cliente} ${venda.produto}`.toLowerCase();
+
+            const status = venda.status === 'pago' ? 'pago' : 'pendente';
+
+            return texto.includes(busca) &&
+                (statusFiltro === 'todos' || status === statusFiltro) &&
+                (culturaFiltro === 'todas' || venda.cultura === culturaFiltro);
+        });
+
+        $('kpiVendido').textContent = moeda(
+            vendas.reduce((s, v) => s + Number(v.total), 0)
+        );
+
+        $('kpiRecebido').textContent = moeda(
+            vendas.filter(v => v.status === 'pago')
+                .reduce((s, v) => s + Number(v.total), 0)
+        );
+
+        $('kpiPendente').textContent = moeda(
+            vendas.filter(v => v.status !== 'pago')
+                .reduce((s, v) => s + Number(v.total), 0)
+        );
+
+        $('kpiQuantidade').textContent = vendas.length;
+
+        const culturas = [...new Set(
+            vendas.map(v => v.cultura).filter(Boolean)
+        )];
+
+        const filtro = $('filtroCultura');
+        const selecionado = filtro.value || 'todas';
+
+        filtro.innerHTML = '<option value="todas">Todas as culturas</option>';
+
+        culturas.forEach(cultura => {
+            filtro.innerHTML +=
+                `<option value="${cultura}">${cultura}</option>`;
+        });
+
+        filtro.value = culturas.includes(selecionado) ? selecionado : 'todas';
+
+        const corpo = $('tabelaVendas');
+
+        if (filtradas.length === 0) {
+            corpo.innerHTML = `
+                <tr>
+                    <td colspan="7">
+                        <div class="empty-state">
+                            Nenhuma venda encontrada.
+                        </div>
+                    </td>
+                </tr>`;
+            return;
+        }
+
+        corpo.innerHTML = filtradas.map(venda => `
+            <tr>
+                <td>${venda.data.split('-').reverse().join('/')}</td>
+                <td>${venda.cliente}</td>
+                <td>${venda.produto}</td>
+                <td>${venda.quantidade} ${venda.unidade}</td>
+                <td>${moeda(venda.total)}</td>
+                <td>
+                    <span class="${venda.status === 'pago' ? 'badge-pago' : 'badge-pendente'}">
+                        ${venda.status === 'pago' ? 'Pago' : 'Pendente'}
+                    </span>
+                    <span class="cell-sub">${venda.formaPagamento}</span>
+                </td>
+                <td>
+                    ${venda.status !== 'pago' ? `
+                        <button class="btn-mini"
+                            onclick="abrirRecebimento('${venda.id}')">
+                            Receber
+                        </button>
+                    ` : ''}
+                    <button class="btn-mini"
+                        onclick="excluirVenda('${venda.id}')">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+
+    // ==========================================
+    // RECEBIMENTOS
+    // ==========================================
+
+    function abrirRecebimento(id) {
+        const venda = vendas.find(item => item.id === id);
+
+        if (!venda) return;
+
+        $('recebimentoId').value = id;
+        $('resumoRecebimento').textContent =
+            `${venda.cliente} - ${moeda(venda.total)}`;
+
+        $('dataRecebimento').value = dataHoje();
+
+        $('modalRecebimento').style.display = 'flex';
+    }
+
+    function salvarRecebimento(event) {
+        event.preventDefault();
+
+        carregarDados();
+
+        const id = $('recebimentoId').value;
+        const data = $('dataRecebimento').value;
+
+        const venda = vendas.find(item => item.id === id);
+
+        if (!venda || !data) return;
+
+        venda.status = 'pago';
+        venda.dataPagamento = data;
+
+        const lancamento = lancamentosFinanceiros.find(
+            item => item.vendaId === id
+        );
+
+        if (lancamento) {
+            lancamento.dataPagamento = data;
+        }
+
+        salvarDados();
+
+        fecharModais();
+        renderVendas();
+
+        toast('Recebimento registrado!');
+    }
+
+
+    // ==========================================
+    // EXCLUIR VENDA
+    // ==========================================
+
+    function excluirVenda(id) {
+        carregarDados();
+
+        const venda = vendas.find(item => item.id === id);
+
+        if (!venda) return;
+
+        if (!confirm('Deseja realmente excluir esta venda? O estoque será devolvido.')) {
+            return;
+        }
+
+        const produto = itensEstoque.find(
+            item => String(item.id) === String(venda.produtoId)
+        );
+
+        if (produto) {
+            produto.quantidade =
+                Number(produto.quantidade) + Number(venda.quantidade);
+
+            movimentacoes.push({
+                id: gerarId(),
+                itemId: produto.id,
+                itemNome: produto.nome,
+                unidade: produto.unidade,
+                tipo: 'entrada',
+                quantidade: venda.quantidade,
+                delta: venda.quantidade,
+                saldoApos: produto.quantidade,
+                data: dataHoje(),
+                motivo: 'Estorno de venda',
+                origem: 'venda_cancelada'
+            });
+        }
+
+        vendas = vendas.filter(item => item.id !== id);
+
+        lancamentosFinanceiros = lancamentosFinanceiros.filter(
+            item => item.vendaId !== id
+        );
+
+        salvarDados();
+        renderVendas();
+
+        toast('Venda excluída e estoque atualizado!');
+    }
+
+
+    // ==========================================
+    // FECHAR MODAIS
+    // ==========================================
+
+    function fecharModais() {
+        $('modalVenda').style.display = 'none';
+        $('modalCliente').style.display = 'none';
+        $('modalRecebimento').style.display = 'none';
+    }
+
+
+    // ==========================================
+    // INICIALIZAÇÃO
+    // ==========================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        carregarDados();
+
+        const nome = localStorage.getItem('usuarioLogado');
+
+        if (nome) {
+            $('userName').textContent = nome;
+
+            $('userAvatar').textContent = nome
+                .split(' ')
+                .map(p => p[0])
+                .join('')
+                .substring(0, 2)
+                .toUpperCase();
+        }
+
+        preencherClientes();
+        preencherProdutos();
+        renderVendas();
+
+        window.addEventListener('storage', function() {
+            carregarDados();
+            preencherClientes();
+            preencherProdutos();
+            renderVendas();
+        });
+    });
+
+</script>
+
+
+</body>
+</html>

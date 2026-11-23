@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraViva - Estoque</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estoque.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">
+            <i class="fa-solid fa-leaf"></i>
+            <span>TerraViva</span>
+        </div>
+
+        <ul class="nav-menu">
+            <li><a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="cultivos.html" class="nav-item"><i class="fa-solid fa-seedling"></i> Cultivos</a></li>
+            <li><a href="calendario.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendário</a></li>
+            <li><a href="clima.html" class="nav-item"><i class="fa-solid fa-cloud-sun-rain"></i> Clima</a></li>
+            <li><a href="estoque.html" class="nav-item active"><i class="fa-solid fa-boxes-stacked"></i> Estoque</a></li>
+            <li><a href="financeiro.html" class="nav-item"><i class="fa-solid fa-sack-dollar"></i> Financeiro</a></li>
+            <li><a href="vendas.html" class="nav-item"><i class="fa-solid fa-cart-shopping"></i> Vendas</a></li>
+            <li><a href="atividades.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Atividades</a></li>
+            <li><a href="pragas.html" class="nav-item"><i class="fa-solid fa-bug"></i> Pragas</a></li>
+            <li><a href="sustentabilidade.html" class="nav-item"><i class="fa-solid fa-recycle"></i> Sustentabilidade</a></li>
+        </ul>
+
+        <div class="user-profile-sidebar">
+            <div class="avatar" id="userAvatar">GA</div>
+            <div class="user-info">
+                <h4 id="userName">Produtor</h4>
+                <p>Fazenda Esperança</p>
+            </div>
+            <i class="fa-solid fa-gear" style="margin-left: auto; color: var(--text-muted); cursor: pointer;" onclick="window.location.href='login.html'"></i>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="greeting">
+                <h1>Controle de Estoque</h1>
+                <p>Gerencie insumos, ferramentas e produtos colhidos, com entradas, saídas e alertas.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-outline" onclick="abrirMov()"><i class="fa-solid fa-right-left"></i> Registrar movimentação</button>
+                <button class="btn-primary" onclick="abrirProduto()"><i class="fa-solid fa-plus"></i> Novo Produto</button>
+            </div>
+        </header>
+
+        <div class="kpi-grid" id="kpis"></div>
+
+        <!-- Alertas de reposição e validade -->
+        <div class="glass-panel content-panel" id="painelAlertas" style="display:none; flex:none;">
+            <div class="panel-header">
+                <div class="panel-title"><i class="fa-solid fa-triangle-exclamation" style="color: var(--warning);"></i> Alertas de estoque</div>
+            </div>
+            <div class="stack" id="listaAlertas"></div>
+        </div>
+
+        <div class="glass-panel content-panel">
+            <div class="toolbar">
+                <div class="view-switch" id="viewSwitch">
+                    <button data-aba="itens" class="active">Itens em estoque</button>
+                    <button data-aba="historico">Histórico de movimentações</button>
+                </div>
+                <div class="search-box" id="boxBusca">
+                    <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+                    <input type="text" id="busca" placeholder="Buscar produto..." oninput="mudarBusca()">
+                </div>
+                <div class="search-box" id="boxFiltroHist" style="display:none;">
+                    <i class="fa-solid fa-filter" style="color: var(--text-muted);"></i>
+                    <select class="filter-select" id="filtroHist" onchange="renderHistorico()"></select>
+                </div>
+            </div>
+
+            <div class="chips" id="chips"></div>
+
+            <div class="table-wrap" id="areaTabela"></div>
+        </div>
+    </main>
+
+    <!-- Modal: produto -->
+    <div class="modal-overlay" id="modalProduto">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <span id="modalProdutoTitulo">Novo Produto</span>
+                <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" onclick="fecharModais()"></i>
+            </div>
+            <form id="formProduto" onsubmit="salvarProduto(event)">
+                <input type="hidden" id="pId">
+                <div class="form-group">
+                    <label for="pNome">Produto</label>
+                    <input type="text" id="pNome" required placeholder="Ex: Fertilizante orgânico">
+                </div>
+                <div class="form-row" style="margin-top:14px;">
+                    <div class="form-group">
+                        <label for="pCategoria">Categoria</label>
+                        <select id="pCategoria"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pUnidade">Unidade</label>
+                        <select id="pUnidade"></select>
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top:14px;">
+                    <div class="form-group">
+                        <label for="pQtd">Quantidade</label>
+                        <input type="number" id="pQtd" required min="0" step="any" placeholder="Ex: 50">
+                    </div>
+                    <div class="form-group">
+                        <label for="pMin">Estoque mínimo</label>
+                        <input type="number" id="pMin" min="0" step="any" placeholder="Ex: 10">
+                    </div>
+                </div>
+                <div class="form-hint" id="pDicaQtd">A quantidade inicial é registrada no histórico como "Estoque inicial".</div>
+                <div class="form-row" style="margin-top:14px;">
+                    <div class="form-group">
+                        <label for="pEntrada">Data de entrada</label>
+                        <input type="date" id="pEntrada">
+                    </div>
+                    <div class="form-group">
+                        <label for="pValidade">Validade (opcional)</label>
+                        <input type="date" id="pValidade">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="fecharModais()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: movimentação -->
+    <div class="modal-overlay" id="modalMov">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <span>Registrar movimentação</span>
+                <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" onclick="fecharModais()"></i>
+            </div>
+            <form id="formMov" onsubmit="salvarMov(event)">
+                <div class="form-group">
+                    <label for="mItem">Produto</label>
+                    <select id="mItem" required onchange="atualizarSaldoMov()"></select>
+                    <div class="form-hint" id="mSaldo"></div>
+                </div>
+                <div class="form-row" style="margin-top:14px;">
+                    <div class="form-group">
+                        <label for="mTipo">Tipo</label>
+                        <select id="mTipo">
+                            <option value="entrada">Entrada</option>
+                            <option value="saida">Saída</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mQtd">Quantidade</label>
+                        <input type="number" id="mQtd" required min="0.001" step="any">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top:14px;">
+                    <div class="form-group">
+                        <label for="mData">Data</label>
+                        <input type="date" id="mData" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mMotivo">Motivo</label>
+                        <input type="text" id="mMotivo" list="listaMotivos" placeholder="Ex: Compra">
+                        <datalist id="listaMotivos">
+                            <option value="Compra"><option value="Colheita"><option value="Uso na lavoura">
+                            <option value="Perda ou descarte"><option value="Venda"><option value="Doação"><option value="Devolução">
+                        </datalist>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="fecharModais()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Registrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastBox"></div>
+
+    <script>
+        /* ================= Usuário ================= */
+        const nomeUsuario = localStorage.getItem('usuarioLogado');
+        if (nomeUsuario) {
+            document.getElementById('userName').textContent = nomeUsuario;
+            const iniciais = nomeUsuario.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            document.getElementById('userAvatar').textContent = iniciais;
+        }
+
+        /* ================= Configuração ================= */
+        // Mesmas chaves usadas pelo calendario.html (é assim que as páginas "conversam")
+        const KEY_ITENS = 'terraviva_estoque';
+        const KEY_MOVS = 'terraviva_movimentacoes';
+        const DIAS_VENCIMENTO = 30;   // "próximo do vencimento" = faltam até 30 dias
+
+        const CATEGORIAS = {
+            sementes:     { nome: 'Sementes e mudas',            icone: 'fa-seedling' },
+            fertilizantes:{ nome: 'Fertilizantes e adubos',      icone: 'fa-flask' },
+            ferramentas:  { nome: 'Ferramentas e equipamentos',  icone: 'fa-screwdriver-wrench' },
+            defensivos:   { nome: 'Defensivos agrícolas',        icone: 'fa-spray-can-sparkles' },
+            colhidos:     { nome: 'Produtos colhidos',           icone: 'fa-basket-shopping' },
+            outros:       { nome: 'Outros materiais',            icone: 'fa-box' }
+        };
+        const UNIDADES = ['kg', 'g', 'L', 'mL', 'un', 'saco', 'saca', 'caixa', 'pacote'];
+
+        /* ================= Estado ================= */
+        let itens = lerJSON(KEY_ITENS);
+        let movs = lerJSON(KEY_MOVS);
+        let aba = 'itens';
+        let filtroCat = 'todas';
+        let busca = '';
+
+        /* ================= Helpers ================= */
+        const $ = id => document.getElementById(id);
+        const pad = n => String(n).padStart(2, '0');
+        const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        const parseISO = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+        const hojeIso = () => iso(new Date());
+        const addDias = n => { const d = new Date(); d.setDate(d.getDate() + n); return iso(d); };
+        const fmtData = s => s ? s.split('-').reverse().join('/') : '-';
+        const fmtNum = n => Number(n).toLocaleString('pt-BR', { maximumFractionDigits: 3 });
+        const arred = n => Math.round(n * 1000) / 1000;
+        const uid = () => 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const normaliza = s => String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+        function lerJSON(key) { try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; } }
+        function salvarTudo() {
+            try {
+                localStorage.setItem(KEY_ITENS, JSON.stringify(itens));
+                localStorage.setItem(KEY_MOVS, JSON.stringify(movs));
+            } catch (e) { console.error('Erro ao salvar estoque', e); toast('Não foi possível salvar os dados.', true); }
+        }
+        function toast(msg, erro = false) {
+            const el = document.createElement('div');
+            el.className = 'toast' + (erro ? ' erro' : '');
+            el.textContent = msg;
+            $('toastBox').appendChild(el);
+            setTimeout(() => el.remove(), 5000);
+        }
+
+        /* ================= Regras de negócio ================= */
+        function temMinimo(it) { return it.minimo !== null && it.minimo !== undefined && it.minimo !== ''; }
+
+        function statusEstoque(it) {
+            if (it.quantidade <= 0) return { cls: 'badge-late', txt: 'Zerado', nivel: 2 };
+            if (temMinimo(it) && it.quantidade <= Number(it.minimo)) return { cls: 'badge-warn', txt: 'Repor', nivel: 1 };
+            return { cls: 'badge-ok', txt: 'OK', nivel: 0 };
+        }
+
+        function infoValidade(it) {
+            if (!it.validade) return null;
+            const dias = Math.round((parseISO(it.validade) - parseISO(hojeIso())) / 86400000);
+            if (dias < 0) return { dias, cls: 'badge-late', txt: `Vencido há ${-dias} dia${dias === -1 ? '' : 's'}`, nivel: 2 };
+            if (dias === 0) return { dias, cls: 'badge-late', txt: 'Vence hoje', nivel: 2 };
+            if (dias <= DIAS_VENCIMENTO) return { dias, cls: 'badge-warn', txt: `Vence em ${dias} dia${dias === 1 ? '' : 's'}`, nivel: 1 };
+            return { dias, cls: '', txt: '', nivel: 0 };
+        }
+
+        function registrarMov(item, delta, tipo, motivo, origem, data) {
+            movs.push({
+                id: uid(), itemId: item.id, itemNome: item.nome, unidade: item.unidade,
+                tipo, quantidade: Math.abs(delta), delta, saldoApos: item.quantidade,
+                data: data || hojeIso(), criadoEm: Date.now(), motivo: motivo || '', origem: origem || 'manual'
+            });
+        }
+
+        /* ================= Renderização ================= */
+        function renderTudo() { renderKPIs(); renderAlertas(); renderChips(); renderAba(); }
+
+        function renderKPIs() {
+            const baixo = itens.filter(i => statusEstoque(i).nivel > 0).length;
+            const proximos = itens.filter(i => i.quantidade > 0 && infoValidade(i)?.nivel === 1).length;
+            const vencidos = itens.filter(i => i.quantidade > 0 && infoValidade(i)?.nivel === 2).length;
+            const cards = [
+                ['', 'fa-boxes-stacked', 'Itens cadastrados', itens.length, `${new Set(itens.map(i => i.categoria)).size} categoria(s) em uso`],
+                [baixo ? 'warn' : 'ok', 'fa-arrow-down-short-wide', 'Para reposição', baixo, 'abaixo do estoque mínimo'],
+                [proximos ? 'warn' : 'ok', 'fa-hourglass-half', 'Próximos do vencimento', proximos, `nos próximos ${DIAS_VENCIMENTO} dias`],
+                [vencidos ? 'danger' : 'ok', 'fa-calendar-xmark', 'Vencidos', vencidos, 'com saldo em estoque']
+            ];
+            $('kpis').innerHTML = cards.map(([cls, ic, t, v, f]) => `
+                <div class="glass-panel kpi-card ${cls}">
+                    <div class="kpi-header"><span>${t}</span><i class="fa-solid ${ic}"></i></div>
+                    <div class="kpi-value">${v}</div>
+                    <div class="kpi-footer">${f}</div>
+                </div>`).join('');
+        }
+
+        function renderAlertas() {
+            const out = [];
+            itens.forEach(it => {
+                const st = statusEstoque(it);
+                if (st.nivel === 2) out.push({ n: 'alerta', ic: 'fa-box-open', id: it.id, txt: `<strong>${esc(it.nome)}</strong> está zerado. Considere repor o estoque.` });
+                else if (st.nivel === 1) out.push({ n: 'atencao', ic: 'fa-arrow-down-short-wide', id: it.id, txt: `<strong>${esc(it.nome)}</strong> está com ${fmtNum(it.quantidade)} ${esc(it.unidade)} (mínimo: ${fmtNum(it.minimo)} ${esc(it.unidade)}). Considere repor.` });
+                const v = infoValidade(it);
+                if (it.quantidade > 0 && v && v.nivel === 2) out.push({ n: 'alerta', ic: 'fa-calendar-xmark', id: null, txt: `<strong>${esc(it.nome)}</strong>: ${v.txt.toLowerCase()} (${fmtData(it.validade)}).` });
+                else if (it.quantidade > 0 && v && v.nivel === 1) out.push({ n: 'atencao', ic: 'fa-hourglass-half', id: null, txt: `<strong>${esc(it.nome)}</strong>: ${v.txt.toLowerCase()} (${fmtData(it.validade)}).` });
+            });
+            $('painelAlertas').style.display = out.length ? 'flex' : 'none';
+            $('listaAlertas').innerHTML = out.map(a => `
+                <div class="note ${a.n}">
+                    <i class="fa-solid ${a.ic}"></i>
+                    <div>${a.txt}</div>
+                    ${a.id ? `<button onclick="abrirMov('${a.id}','entrada')"><i class="fa-solid fa-plus"></i> Registrar entrada</button>` : ''}
+                </div>`).join('');
+        }
+
+        function renderChips() {
+            const contagem = c => itens.filter(i => i.categoria === c).length;
+            const chips = [`<button class="chip ${filtroCat === 'todas' ? 'active' : ''}" data-cat="todas"><i class="fa-solid fa-layer-group"></i> Todas (${itens.length})</button>`]
+                .concat(Object.entries(CATEGORIAS).map(([k, c]) =>
+                    `<button class="chip ${filtroCat === k ? 'active' : ''}" data-cat="${k}"><i class="fa-solid ${c.icone}"></i> ${c.nome} (${contagem(k)})</button>`));
+            $('chips').innerHTML = chips.join('');
+            $('chips').style.display = aba === 'itens' ? 'flex' : 'none';
+        }
+        $('chips').addEventListener('click', e => {
+            const b = e.target.closest('[data-cat]');
+            if (!b) return;
+            filtroCat = b.dataset.cat;
+            renderChips(); renderTabela();
+        });
+
+        function mudarBusca() { busca = normaliza($('busca').value.trim()); renderTabela(); }
+
+        function renderAba() { aba === 'itens' ? renderTabela() : renderHistorico(); }
+
+        function renderTabela() {
+            const area = $('areaTabela');
+            if (!itens.length) {
+                area.innerHTML = `<div class="empty-state"><i class="fa-solid fa-boxes-stacked"></i>
+                    Nenhum produto cadastrado ainda.
+                    <div class="btns">
+                        <button class="btn-primary" onclick="abrirProduto()"><i class="fa-solid fa-plus"></i> Cadastrar produto</button>
+                        <button class="btn-outline" onclick="carregarExemplos()"><i class="fa-solid fa-wand-magic-sparkles"></i> Carregar dados de exemplo</button>
+                    </div></div>`;
+                return;
+            }
+            const lista = itens
+                .filter(i => filtroCat === 'todas' || i.categoria === filtroCat)
+                .filter(i => !busca || normaliza(i.nome).includes(busca))
+                .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+
+            if (!lista.length) { area.innerHTML = '<div class="empty-state"><i class="fa-solid fa-magnifying-glass"></i>Nenhum produto encontrado com esse filtro.</div>'; return; }
+
+            area.innerHTML = `<table>
+                <thead><tr>
+                    <th>Produto</th><th>Categoria</th><th>Quantidade</th><th>Mínimo</th><th>Entrada</th><th>Validade</th><th>Ações</th>
+                </tr></thead>
+                <tbody>${lista.map(it => {
+                    const st = statusEstoque(it), v = infoValidade(it), cat = CATEGORIAS[it.categoria] || CATEGORIAS.outros;
+                    return `<tr>
+                        <td><strong>${esc(it.nome)}</strong></td>
+                        <td><i class="fa-solid ${cat.icone}" style="color:var(--accent-primary);width:18px;"></i> ${cat.nome}</td>
+                        <td><strong>${fmtNum(it.quantidade)}</strong> ${esc(it.unidade)}<span class="cell-sub"><span class="badge ${st.cls}">${st.txt}</span></span></td>
+                        <td>${temMinimo(it) ? fmtNum(it.minimo) + ' ' + esc(it.unidade) : '-'}</td>
+                        <td>${fmtData(it.entrada)}</td>
+                        <td>${fmtData(it.validade)}${v && v.txt ? `<span class="cell-sub"><span class="badge ${v.cls}">${v.txt}</span></span>` : ''}</td>
+                        <td><div class="action-btns">
+                            <button class="action-btn in" data-acao="entrada" data-id="${it.id}" title="Registrar entrada"><i class="fa-solid fa-circle-plus"></i></button>
+                            <button class="action-btn out" data-acao="saida" data-id="${it.id}" title="Registrar saída"><i class="fa-solid fa-circle-minus"></i></button>
+                            <button class="action-btn" data-acao="historico" data-id="${it.id}" title="Ver histórico"><i class="fa-solid fa-clock-rotate-left"></i></button>
+                            <button class="action-btn" data-acao="editar" data-id="${it.id}" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                            <button class="action-btn delete" data-acao="excluir" data-id="${it.id}" title="Excluir"><i class="fa-regular fa-trash-can"></i></button>
+                        </div></td>
+                    </tr>`;
+                }).join('')}</tbody></table>`;
+        }
+
+        $('areaTabela').addEventListener('click', e => {
+            const b = e.target.closest('[data-acao]');
+            if (!b) return;
+            const id = b.dataset.id;
+            ({
+                entrada: () => abrirMov(id, 'entrada'),
+                saida: () => abrirMov(id, 'saida'),
+                editar: () => abrirProduto(id),
+                excluir: () => excluirProduto(id),
+                historico: () => { aba = 'historico'; sincronizarAba(); $('filtroHist').value = id; renderHistorico(); }
+            })[b.dataset.acao]();
+        });
+
+        /* ---- Histórico ---- */
+        function renderHistorico() {
+            // opções do filtro (inclui produtos já excluídos que ainda têm histórico)
+            const nomes = new Map();
+            movs.forEach(m => nomes.set(m.itemId, m.itemNome));
+            itens.forEach(i => nomes.set(i.id, i.nome));
+            const atual = $('filtroHist').value || 'todos';
+            $('filtroHist').innerHTML = '<option value="todos">Todos os produtos</option>' +
+                [...nomes.entries()].sort((a, b) => a[1].localeCompare(b[1], 'pt-BR')).map(([id, n]) => `<option value="${id}">${esc(n)}</option>`).join('');
+            $('filtroHist').value = nomes.has(atual) ? atual : 'todos';
+
+            const f = $('filtroHist').value;
+            const lista = movs.filter(m => f === 'todos' || m.itemId === f)
+                .sort((a, b) => (b.data.localeCompare(a.data)) || (b.criadoEm - a.criadoEm)).slice(0, 300);
+
+            if (!lista.length) { $('areaTabela').innerHTML = '<div class="empty-state"><i class="fa-solid fa-clock-rotate-left"></i>Nenhuma movimentação registrada.</div>'; return; }
+
+            const tipoBadge = m => m.tipo === 'entrada' ? '<span class="badge badge-ok">Entrada</span>'
+                : m.tipo === 'saida' ? '<span class="badge badge-warn">Saída</span>' : '<span class="badge badge-info">Ajuste</span>';
+
+            $('areaTabela').innerHTML = `<table>
+                <thead><tr><th>Data</th><th>Produto</th><th>Tipo</th><th>Quantidade</th><th>Saldo após</th><th>Motivo</th></tr></thead>
+                <tbody>${lista.map(m => `<tr>
+                    <td>${fmtData(m.data)}</td>
+                    <td><strong>${esc(m.itemNome)}</strong></td>
+                    <td>${tipoBadge(m)}</td>
+                    <td class="${m.delta >= 0 ? 'qty-pos' : 'qty-neg'}">${m.delta >= 0 ? '+' : '−'}${fmtNum(Math.abs(m.delta))} ${esc(m.unidade)}</td>
+                    <td>${fmtNum(m.saldoApos)} ${esc(m.unidade)}</td>
+                    <td>${esc(m.motivo) || '-'}${m.origem === 'atividade' ? ' <span class="badge badge-muted"><i class="fa-regular fa-calendar"></i> Atividade</span>' : ''}</td>
+                </tr>`).join('')}</tbody></table>`;
+        }
+
+        /* ---- Abas ---- */
+        function sincronizarAba() {
+            document.querySelectorAll('#viewSwitch button').forEach(b => b.classList.toggle('active', b.dataset.aba === aba));
+            $('boxBusca').style.display = aba === 'itens' ? 'flex' : 'none';
+            $('boxFiltroHist').style.display = aba === 'historico' ? 'flex' : 'none';
+            renderChips();
+            renderAba();
+        }
+        document.querySelectorAll('#viewSwitch button').forEach(b => b.addEventListener('click', () => { aba = b.dataset.aba; sincronizarAba(); }));
+
+        /* ================= Modais ================= */
+        $('pCategoria').innerHTML = Object.entries(CATEGORIAS).map(([k, c]) => `<option value="${k}">${c.nome}</option>`).join('');
+        $('pUnidade').innerHTML = UNIDADES.map(u => `<option value="${u}">${u}</option>`).join('');
+
+        function fecharModais() {
+            $('modalProduto').style.display = 'none';
+            $('modalMov').style.display = 'none';
+        }
+
+        function abrirProduto(id) {
+            $('formProduto').reset();
+            $('pId').value = id || '';
+            if (id) {
+                const it = itens.find(i => i.id === id);
+                $('modalProdutoTitulo').textContent = 'Editar Produto';
+                $('pNome').value = it.nome; $('pCategoria').value = it.categoria; $('pUnidade').value = it.unidade;
+                $('pQtd').value = it.quantidade; $('pMin').value = temMinimo(it) ? it.minimo : '';
+                $('pEntrada').value = it.entrada || ''; $('pValidade').value = it.validade || '';
+                $('pDicaQtd').textContent = 'Alterar a quantidade registra um "Ajuste" no histórico de movimentações.';
+            } else {
+                $('modalProdutoTitulo').textContent = 'Novo Produto';
+                $('pEntrada').value = hojeIso();
+                if (filtroCat !== 'todas') $('pCategoria').value = filtroCat;
+                $('pDicaQtd').textContent = 'A quantidade inicial é registrada no histórico como "Estoque inicial".';
+            }
+            $('modalProduto').style.display = 'flex';
+        }
+
+        function salvarProduto(e) {
+            e.preventDefault();
+            const id = $('pId').value;
+            const dados = {
+                nome: $('pNome').value.trim(),
+                categoria: $('pCategoria').value,
+                unidade: $('pUnidade').value,
+                minimo: $('pMin').value === '' ? null : Number($('pMin').value),
+                entrada: $('pEntrada').value,
+                validade: $('pValidade').value
+            };
+            const qtd = arred(Number($('pQtd').value));
+
+            if (id) {
+                const it = itens.find(i => i.id === id), antiga = it.quantidade;
+                Object.assign(it, dados, { quantidade: qtd });
+                if (qtd !== antiga) registrarMov(it, arred(qtd - antiga), 'ajuste', 'Ajuste manual de quantidade', 'manual');
+            } else {
+                const it = { id: uid(), ...dados, quantidade: qtd };
+                itens.push(it);
+                if (qtd > 0) registrarMov(it, qtd, 'entrada', 'Estoque inicial', 'manual', dados.entrada || hojeIso());
+            }
+            salvarTudo(); fecharModais(); renderTudo();
+        }
+
+        function excluirProduto(id) {
+            const it = itens.find(i => i.id === id);
+            if (it && confirm(`Excluir "${it.nome}" do estoque? O histórico de movimentações será mantido.`)) {
+                itens = itens.filter(i => i.id !== id);
+                salvarTudo(); renderTudo();
+            }
+        }
+
+        function abrirMov(id, tipo) {
+            if (!itens.length) { toast('Cadastre um produto antes de registrar movimentações.', true); return; }
+            $('formMov').reset();
+            $('mItem').innerHTML = itens.slice().sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+                .map(i => `<option value="${i.id}">${esc(i.nome)}</option>`).join('');
+            if (id) $('mItem').value = id;
+            $('mTipo').value = tipo || 'entrada';
+            $('mData').value = hojeIso();
+            atualizarSaldoMov();
+            $('modalMov').style.display = 'flex';
+        }
+
+        function atualizarSaldoMov() {
+            const it = itens.find(i => i.id === $('mItem').value);
+            $('mSaldo').textContent = it ? `Saldo atual: ${fmtNum(it.quantidade)} ${it.unidade}` : '';
+        }
+
+        function salvarMov(e) {
+            e.preventDefault();
+            const it = itens.find(i => i.id === $('mItem').value);
+            const tipo = $('mTipo').value;
+            const qtd = arred(Number($('mQtd').value));
+            if (!it || !(qtd > 0)) return;
+            if (tipo === 'saida' && qtd > it.quantidade) {
+                toast(`Saída maior que o saldo disponível (${fmtNum(it.quantidade)} ${it.unidade}).`, true);
+                return;
+            }
+            const delta = tipo === 'entrada' ? qtd : -qtd;
+            it.quantidade = arred(it.quantidade + delta);
+            registrarMov(it, delta, tipo, $('mMotivo').value.trim(), 'manual', $('mData').value);
+            salvarTudo(); fecharModais(); renderTudo();
+            toast(`${tipo === 'entrada' ? 'Entrada' : 'Saída'} registrada: ${fmtNum(qtd)} ${it.unidade} de ${it.nome}.`);
+        }
+
+        /* ================= Dados de exemplo (para testar sem backend) ================= */
+        function carregarExemplos() {
+            const base = [
+                { nome: 'Fertilizante orgânico', categoria: 'fertilizantes', unidade: 'kg', quantidade: 50, minimo: 10, entrada: '2026-11-10', validade: '2027-11-10' },
+                { nome: 'Sementes de tomate', categoria: 'sementes', unidade: 'pacote', quantidade: 4, minimo: 10, entrada: addDias(-20), validade: addDias(200) },
+                { nome: 'Fungicida cúprico', categoria: 'defensivos', unidade: 'L', quantidade: 12, minimo: 5, entrada: addDias(-60), validade: addDias(15) },
+                { nome: 'Inseticida natural', categoria: 'defensivos', unidade: 'L', quantidade: 3, minimo: 2, entrada: addDias(-200), validade: addDias(-5) },
+                { nome: 'Enxada', categoria: 'ferramentas', unidade: 'un', quantidade: 6, minimo: 2, entrada: addDias(-300), validade: '' },
+                { nome: 'Tomate colhido', categoria: 'colhidos', unidade: 'kg', quantidade: 120, minimo: null, entrada: addDias(-2), validade: addDias(8) }
+            ];
+            base.forEach(b => {
+                const it = { id: uid(), ...b };
+                itens.push(it);
+                registrarMov(it, it.quantidade, 'entrada', 'Estoque inicial', 'manual', it.entrada);
+            });
+            salvarTudo(); renderTudo();
+        }
+
+        /* ================= Início ================= */
+        sincronizarAba();
+        renderTudo();
+        // se o calendário (outra aba) mexer no estoque, atualiza aqui
+        window.addEventListener('storage', () => { itens = lerJSON(KEY_ITENS); movs = lerJSON(KEY_MOVS); renderTudo(); });
+    </script>
+</body>
+</html>

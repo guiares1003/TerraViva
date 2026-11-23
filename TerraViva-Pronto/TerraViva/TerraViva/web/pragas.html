@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraViva - Pragas e Doenças</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="pragas.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><i class="fa-solid fa-leaf"></i><span>TerraViva</span></div>
+        <ul class="nav-menu">
+            <li><a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="cultivos.html" class="nav-item"><i class="fa-solid fa-seedling"></i> Cultivos</a></li>
+            <li><a href="calendario.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendário</a></li>
+            <li><a href="clima.html" class="nav-item"><i class="fa-solid fa-cloud-sun-rain"></i> Clima</a></li>
+            <li><a href="estoque.html" class="nav-item"><i class="fa-solid fa-boxes-stacked"></i> Estoque</a></li>
+            <li><a href="financeiro.html" class="nav-item"><i class="fa-solid fa-sack-dollar"></i> Financeiro</a></li>
+            <li><a href="vendas.html" class="nav-item"><i class="fa-solid fa-cart-shopping"></i> Vendas</a></li>
+            <li><a href="atividades.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Atividades</a></li>
+            <li><a href="pragas.html" class="nav-item active"><i class="fa-solid fa-bug"></i> Pragas</a></li>
+            <li><a href="sustentabilidade.html" class="nav-item"><i class="fa-solid fa-recycle"></i> Sustentabilidade</a></li>
+        </ul>
+        <div class="user-profile-sidebar">
+            <div class="avatar" id="userAvatar">GA</div>
+            <div class="user-info"><h4 id="userName">Produtor</h4><p>Fazenda Esperança</p></div>
+            <i class="fa-solid fa-gear" style="margin-left:auto;color:var(--text-muted);cursor:pointer;" onclick="window.location.href='login.html'"></i>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="greeting">
+                <h1>Biblioteca de Pragas e Doenças</h1>
+                <p>Consulte informações técnicas e registre o que foi observado na sua propriedade.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-outline" onclick="abrirOcorrencia()"><i class="fa-solid fa-clipboard-check"></i> Registrar ocorrência</button>
+            </div>
+        </header>
+
+        <section class="info-alert">
+            <div class="info-alert-icon"><i class="fa-solid fa-circle-info"></i></div>
+            <div>
+                <strong>Material de consulta e apoio à identificação</strong>
+                <p>Fotos e sintomas são referências informativas, não representam diagnóstico automático. Problemas diferentes podem apresentar sinais parecidos. Em caso de dúvida ou avanço do problema, procure assistência técnica ou um engenheiro agrônomo.</p>
+            </div>
+        </section>
+
+        <section class="kpi-grid praga-kpis">
+            <div class="glass-panel kpi-card"><div class="kpi-header"><span>Registros na biblioteca</span><i class="fa-solid fa-book-open"></i></div><div class="kpi-value" id="kpiBiblioteca">6</div><div class="kpi-footer">Pragas e doenças informativas</div></div>
+            <div class="glass-panel kpi-card"><div class="kpi-header"><span>Pragas</span><i class="fa-solid fa-bug"></i></div><div class="kpi-value" id="kpiPragas">4</div><div class="kpi-footer">Insetos e ácaros</div></div>
+            <div class="glass-panel kpi-card"><div class="kpi-header"><span>Doenças</span><i class="fa-solid fa-leaf"></i></div><div class="kpi-value" id="kpiDoencas">2</div><div class="kpi-footer">Problemas fitossanitários</div></div>
+            <div class="glass-panel kpi-card warn"><div class="kpi-header"><span>Ocorrências abertas</span><i class="fa-solid fa-clipboard-list"></i></div><div class="kpi-value" id="kpiOcorrencias">0</div><div class="kpi-footer">Registros na propriedade</div></div>
+        </section>
+
+        <section class="glass-panel content-panel library-panel" id="painelBiblioteca">
+            <div class="panel-header library-heading">
+                <div><div class="panel-title"><i class="fa-solid fa-book-open"></i> Biblioteca agrícola</div><p class="panel-subtitle">Pesquise por nome, cultura ou característica observada.</p></div>
+                <div class="view-switch" id="abasPragas">
+                    <button class="active" data-aba="biblioteca" onclick="alternarAba('biblioteca')">Biblioteca</button>
+                    <button data-aba="ocorrencias" onclick="alternarAba('ocorrencias')">Minhas ocorrências <span class="tab-count" id="contadorOcorrencias">0</span></button>
+                </div>
+            </div>
+
+            <div class="toolbar pragas-toolbar" id="ferramentasBiblioteca">
+                <div class="search-box search-pragas"><i class="fa-solid fa-magnifying-glass"></i><input id="buscaPraga" type="search" placeholder="Buscar praga, doença ou sintoma..." oninput="renderBiblioteca()"></div>
+                <select class="filter-select" id="filtroCultura" onchange="renderBiblioteca()"><option value="todas">Todas as culturas</option></select>
+                <select class="filter-select" id="filtroTipo" onchange="renderBiblioteca()"><option value="todos">Pragas e doenças</option><option value="praga">Somente pragas</option><option value="doenca">Somente doenças</option></select>
+            </div>
+
+            <div class="result-line" id="resultadoBiblioteca">6 registros encontrados</div>
+            <div class="library-grid" id="gradeBiblioteca"></div>
+        </section>
+
+        <section class="glass-panel content-panel occurrences-panel" id="painelOcorrencias" style="display:none;">
+            <div class="panel-header">
+                <div><div class="panel-title"><i class="fa-solid fa-clipboard-check"></i> Ocorrências na propriedade</div><p class="panel-subtitle">Acompanhe os pontos observados e as providências adotadas.</p></div>
+                <button class="btn-primary" onclick="abrirOcorrencia()"><i class="fa-solid fa-plus"></i> Nova ocorrência</button>
+            </div>
+            <div class="toolbar occurrence-toolbar">
+                <div class="search-box search-pragas"><i class="fa-solid fa-magnifying-glass"></i><input id="buscaOcorrencia" type="search" placeholder="Buscar por praga, cultura ou área..." oninput="renderOcorrencias()"></div>
+                <select class="filter-select" id="filtroStatusOcorrencia" onchange="renderOcorrencias()">
+                    <option value="todos">Todos os status</option><option value="registrada">Registrada</option><option value="acompanhamento">Em acompanhamento</option><option value="resolvida">Encerrada</option>
+                </select>
+            </div>
+            <div class="table-wrap">
+                <table class="occurrence-table">
+                    <thead><tr><th>Registro</th><th>Cultura vinculada</th><th>Data</th><th>Área / talhão</th><th>Intensidade</th><th>Status</th><th>Ações</th></tr></thead>
+                    <tbody id="tabelaOcorrencias"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de detalhes da biblioteca -->
+    <div class="modal-overlay" id="modalDetalhes" onclick="fecharModalFora(event, 'modalDetalhes')">
+        <div class="modal-content detail-modal" role="dialog" aria-modal="true" aria-labelledby="detalheNome">
+            <div class="modal-header"><span>Informações técnicas</span><button class="icon-close" type="button" onclick="fecharModal('modalDetalhes')" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button></div>
+            <div id="conteudoDetalhes"></div>
+        </div>
+    </div>
+
+    <!-- Modal de registro de ocorrência -->
+    <div class="modal-overlay" id="modalOcorrencia" onclick="fecharModalFora(event, 'modalOcorrencia')">
+        <div class="modal-content occurrence-modal" role="dialog" aria-modal="true" aria-labelledby="tituloModalOcorrencia">
+            <div class="modal-header"><span id="tituloModalOcorrencia">Registrar ocorrência</span><button class="icon-close" type="button" onclick="fecharModal('modalOcorrencia')" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button></div>
+            <form id="formOcorrencia" onsubmit="salvarOcorrencia(event)">
+                <input type="hidden" id="ocorrenciaId">
+                <div class="form-group"><label for="ocorrenciaPraga">Praga ou doença observada *</label><select id="ocorrenciaPraga" required></select></div>
+                <div class="form-row">
+                    <div class="form-group"><label for="ocorrenciaCultivo">Cultivo relacionado</label><select id="ocorrenciaCultivo"><option value="">Não vincular a um cultivo</option></select></div>
+                    <div class="form-group"><label for="ocorrenciaData">Data da observação *</label><input type="date" id="ocorrenciaData" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label for="ocorrenciaArea">Área / talhão</label><input type="text" id="ocorrenciaArea" maxlength="100" placeholder="Ex: Talhão 02"></div>
+                    <div class="form-group"><label for="ocorrenciaIntensidade">Intensidade observada</label><select id="ocorrenciaIntensidade"><option value="baixa">Baixa</option><option value="media" selected>Média</option><option value="alta">Alta</option></select></div>
+                </div>
+                <div class="form-group"><label for="ocorrenciaStatus">Status do acompanhamento</label><select id="ocorrenciaStatus"><option value="registrada">Registrada</option><option value="acompanhamento">Em acompanhamento</option><option value="resolvida">Encerrada</option></select></div>
+                <div class="form-group"><label for="ocorrenciaObservacoes">Sintomas e observações *</label><textarea id="ocorrenciaObservacoes" rows="4" required maxlength="1500" placeholder="Descreva o que foi observado, em quais plantas e quais providências foram tomadas..."></textarea></div>
+                <div class="form-hint"><i class="fa-solid fa-circle-info"></i> Este registro documenta sua observação. Ele não confirma a causa do problema.</div>
+                <div class="modal-footer"><button type="button" class="btn-secondary" onclick="fecharModal('modalOcorrencia')">Cancelar</button><button type="submit" class="btn-primary"><i class="fa-solid fa-check"></i> Salvar registro</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastBox"></div>
+
+<script>
+    // ====================== Usuário ======================
+    const nomeUsuario = localStorage.getItem('usuarioLogado');
+    if (nomeUsuario) {
+        document.getElementById('userName').textContent = nomeUsuario;
+        document.getElementById('userAvatar').textContent = nomeUsuario.split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    }
+
+    // ====================== Dados da biblioteca ======================
+    const API = 'http://localhost:8080/api';
+    const KEY_OCORRENCIAS = 'terraviva_ocorrencias_pragas';
+    const $ = id => document.getElementById(id);
+    const normalizar = texto => String(texto ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const escapar = texto => String(texto ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const hojeISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+    const dataBR = data => data ? String(data).split('-').reverse().join('/') : '—';
+    const uid = () => 'oc-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+    const biblioteca = [
+        {
+            id:'mosca-branca', nome:'Mosca-branca', cientifico:'Bemisia tabaci', tipo:'praga',
+            culturas:['Tomate','Feijão','Pimentão','Berinjela'],
+            imagem:'https://www.tvsitio.com.br/conteudo/curiosidades/codigo_0000163/2016-06-06_12-10-55_1.jpg',
+            imagemFonte:'TV Sítio',
+            resumo:'Inseto sugador que pode reduzir o vigor das plantas e transmitir viroses importantes.',
+            sintomas:['Pequenos insetos brancos que levantam voo quando a folhagem é movimentada.','Presença de ninfas na face inferior das folhas.','Folhas amareladas ou encarquilhadas, redução do vigor e possível formação de fumagina.','Em tomateiro, podem ocorrer frutos com amadurecimento irregular quando há danos associados à alimentação.'],
+            condicoes:['Períodos quentes e secos favorecem o desenvolvimento e a dispersão.','Presença de plantas hospedeiras e restos de cultivos pode manter populações na área.'],
+            prevencao:['Inspecionar regularmente a parte inferior das folhas, especialmente nas bordas do cultivo.','Manter o viveiro e a área de plantio livres de plantas voluntárias e hospedeiras.','Usar mudas sadias, monitoramento e barreiras vegetais quando recomendadas para a região.','Eliminar restos culturais após a colheita e evitar cultivos sobrepostos sem planejamento.'],
+            manejo:['Registrar a presença e acompanhar a evolução da população.','Preservar inimigos naturais e adotar manejo integrado.','Quando houver necessidade de controle, procurar orientação técnica e utilizar somente produtos registrados para a cultura, conforme receituário e bula.'],
+            referencias:[{nome:'Embrapa — Mosca-branca no tomateiro',url:'https://www.embrapa.br/web/agencia-de-informacao-tecnologica/cultivos/tomate/producao/doencas-e-pragas/pragas/mosca-branca'},{nome:'Embrapa — Manejo integrado de pragas do tomate para mesa',url:'https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1148404/1/DOC-192-Final.pdf'}]
+        },
+        {
+            id:'traca-tomateiro', nome:'Traça-do-tomateiro', cientifico:'Tuta absoluta', tipo:'praga',
+            culturas:['Tomate'],
+            imagem:'https://static.wixstatic.com/media/6c1e70_2036b4c736fa4f8c9dee82fa7f8eda52~mv2.jpg/v1/fill/w_1000%2Ch_668%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01/6c1e70_2036b4c736fa4f8c9dee82fa7f8eda52~mv2.jpg',
+            imagemFonte:'IRAC-BR',
+            resumo:'Pequena mariposa cujas lagartas abrem minas nas folhas e podem broquear brotos e frutos.',
+            sintomas:['Galerias ou minas claras no interior das folhas, muitas vezes com fezes visíveis.','Brotações e ponteiros perfurados ou secos.','Frutos com pequenos orifícios, galerias e resíduos próximos ao cálice.','Em ataques intensos, desfolha e perda de flores e frutos jovens.'],
+            condicoes:['Pode ocorrer durante todo o ano, com maior pressão em períodos mais secos em algumas regiões.','A presença de tomateiros abandonados, plantas voluntárias e cultivos próximos em diferentes fases favorece a continuidade da infestação.'],
+            prevencao:['Monitorar ponteiros, folhas, flores e frutos desde o início do cultivo.','Retirar e descartar adequadamente partes muito atacadas, sem deixá-las na área.','Eliminar restos culturais e plantas voluntárias após a colheita.','Utilizar mudas sadias, telas e armadilhas de monitoramento quando adequadas ao sistema de produção.'],
+            manejo:['Realizar inspeções frequentes e registrar os focos por talhão.','Integrar medidas culturais, monitoramento e preservação de inimigos naturais.','Não repetir aplicações por conta própria: a escolha de qualquer produto deve considerar registro para tomate e orientação de responsável técnico.'],
+            referencias:[{nome:'Embrapa — Traça-do-tomateiro',url:'https://www.embrapa.br/web/agencia-de-informacao-tecnologica/cultivos/tomate/producao/doencas-e-pragas/pragas/traca-do-tomateiro'},{nome:'Embrapa — Manejo integrado de pragas do tomate para mesa',url:'https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1148404/1/DOC-192-Final.pdf'}]
+        },
+        {
+            id:'pulgoes', nome:'Pulgões', cientifico:'Aphis gossypii, Myzus persicae e outros', tipo:'praga',
+            culturas:['Tomate','Pimentão','Batata','Berinjela'],
+            imagem:'https://www.gardenersworldmagazine.nl/app/uploads/2026/05/Bladluizen-op-tomatenplant-tomatenplagen-TS.jpg',
+            imagemFonte:'Gardeners’ World',
+            resumo:'Pequenos insetos sugadores que formam colônias, sobretudo em brotações e folhas novas.',
+            sintomas:['Colônias de insetos verdes, amarelados ou escuros em brotos e na face inferior das folhas.','Folhas novas enroladas ou deformadas e crescimento prejudicado.','Secreção açucarada que pode favorecer o aparecimento de fumagina.','Algumas espécies podem transmitir viroses entre plantas.'],
+            condicoes:['Brotações novas e plantas sob estresse podem favorecer a colonização.','Temperaturas amenas a quentes e presença de plantas hospedeiras podem contribuir para o aumento populacional.'],
+            prevencao:['Inspecionar brotações e folhas novas regularmente.','Controlar plantas voluntárias e hospedeiras próximas, sem eliminar indiscriminadamente a vegetação útil.','Preservar joaninhas, crisopídeos, parasitoides e outros inimigos naturais.','Evitar excesso de adubação nitrogenada, que pode estimular tecidos muito tenros.'],
+            manejo:['Identificar os focos e acompanhar a presença de inimigos naturais.','Quando viável, remover partes muito infestadas e evitar espalhar os insetos durante o manejo.','Buscar orientação técnica antes de qualquer intervenção de controle.'],
+            referencias:[{nome:'Embrapa — Manejo integrado de pragas do tomate para mesa',url:'https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1148404/1/DOC-192-Final.pdf'}]
+        },
+        {
+            id:'acaros', nome:'Ácaro-rajado', cientifico:'Tetranychus urticae', tipo:'praga',
+            culturas:['Tomate','Feijão','Pepino','Morango'],
+            imagem:'https://ephytia.inra.fr/en/I/6299/tetranychus-tomate-DB-289',
+            imagemFonte:'INRAE — Ephytia',
+            resumo:'Ácaro muito pequeno que se alimenta na face inferior das folhas e pode produzir teias finas.',
+            sintomas:['Pontuações claras ou amareladas nas folhas, que podem evoluir para bronzeamento.','Presença de pequenos ácaros e ovos na face inferior das folhas, observados com lupa.','Teias finas em infestações mais intensas.','Folhas secas e queda prematura quando o ataque é severo.'],
+            condicoes:['Tempo quente e seco favorece o desenvolvimento e a multiplicação.','Poeira e desequilíbrio de inimigos naturais podem contribuir para surtos.'],
+            prevencao:['Inspecionar a face inferior das folhas com frequência, usando lupa quando possível.','Manter plantas bem hidratadas, evitando estresse hídrico.','Reduzir poeira na área e preservar ácaros predadores e outros inimigos naturais.','Evitar aplicações desnecessárias que possam eliminar organismos benéficos.'],
+            manejo:['Marcar e acompanhar os focos, observando se a infestação está aumentando.','Separar, quando possível, plantas muito atacadas e higienizar ferramentas utilizadas.','A definição de medidas de controle deve ser feita com assistência técnica, considerando a cultura e os organismos benéficos presentes.'],
+            referencias:[{nome:'Embrapa — Documento técnico sobre ácaro-rajado',url:'https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1035973/1/DOC148FINAL.pdf'},{nome:'INRAE — Ácaros em tomateiro',url:'https://ephytia.inra.fr/en/C/5091/Tomato-Acariens'}]
+        },
+        {
+            id:'requeima', nome:'Requeima', cientifico:'Phytophthora infestans', tipo:'doenca',
+            culturas:['Tomate','Batata'],
+            imagem:'https://www.dobrasemena.cz/img/cms/Protiplisnova%20rajcata/raj%C4%8De%20-%20pl%C3%ADse%C5%88%2034Dsmr.jpg',
+            imagemFonte:'Dobrá Semena',
+            resumo:'Doença causada por oomiceto, capaz de avançar rapidamente sob condições ambientais favoráveis.',
+            sintomas:['Manchas encharcadas, irregulares e escuras nas folhas.','Em alta umidade, pode surgir crescimento esbranquiçado na face inferior das lesões.','Lesões escuras nos caules e podridão firme e escura nos frutos.','O avanço pode provocar secamento da folhagem e perda de plantas.'],
+            condicoes:['Alta umidade, molhamento prolongado das folhas, orvalho, neblina e chuva favorecem a doença.','Temperaturas amenas associadas à umidade elevada criam condições especialmente favoráveis.','Plantas voluntárias e lavouras próximas infectadas podem servir como fonte de inóculo.'],
+            prevencao:['Evitar molhar a folhagem, preferindo irrigação localizada quando possível.','Garantir espaçamento e ventilação adequados entre plantas.','Utilizar mudas sadias e cultivares recomendadas para a região.','Eliminar restos culturais e plantas voluntárias que possam manter o patógeno.'],
+            manejo:['Ao observar manchas suspeitas, registrar o foco e evitar movimentar plantas molhadas.','Solicitar avaliação técnica rapidamente, pois a doença pode se disseminar depressa.','Qualquer tratamento deve ser definido por profissional habilitado, com produto registrado para a cultura e observância da bula.'],
+            referencias:[{nome:'Embrapa — Requeima em tomateiro',url:'https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/778171/1/CNPHDOEN.DOTOMAT.05.pdf'},{nome:'Embrapa — Produção de tomate para processamento industrial',url:'https://ainfo.cnptia.embrapa.br/digital/bitstream/item/212769/1/PRODUCAO-DE-TOMATE-PARA-PROCESSAMENTO-INDUSTRIAL.pdf'}]
+        },
+        {
+            id:'oidio', nome:'Oídio', cientifico:'Oidium neolycopersici / Oidiopsis haplophylli', tipo:'doenca',
+            culturas:['Tomate'],
+            imagem:'https://image.jimcdn.com/app/cms/image/transf/dimension%3D1920x400%3Aformat%3Djpg/path/sa80b6befa90b2646/image/ie8e063351db26628/version/1446186799/image.jpg',
+            imagemFonte:'Schadbild',
+            resumo:'Doença fúngica que pode formar áreas com aparência de pó branco sobre as folhas.',
+            sintomas:['Pó branco e fino sobre a superfície das folhas, em determinadas espécies do patógeno.','Em outros casos, o crescimento pode ficar mais concentrado na face inferior e ser menos evidente.','Manchas amareladas na face superior, que podem evoluir para necrose.','Amarelecimento, secamento e redução da área foliar em ataques mais severos.'],
+            condicoes:['A ocorrência depende da espécie do agente, da temperatura, da umidade e do microclima do cultivo.','Ambientes com ventilação insuficiente e plantas muito adensadas podem favorecer o desenvolvimento.'],
+            prevencao:['Manter espaçamento e condução que favoreçam a circulação de ar.','Monitorar folhas de diferentes partes da planta.','Retirar restos de plantas doentes após a colheita.','Escolher cultivares recomendadas e adequadas à região, quando disponíveis.'],
+            manejo:['Registrar a distribuição das manchas e acompanhar sua evolução.','Evitar confundir pó branco com resíduos de pulverização ou outros problemas.','Consultar assistência técnica para confirmar a causa e orientar o manejo apropriado.'],
+            referencias:[{nome:'Embrapa — Fungos e oomicetos do tomateiro',url:'https://www.atermaisdigital.cnptia.embrapa.br/web/tomate-de-mesa/fungos-e-oomicetos'}]
+        }
+    ];
+
+    let cultivos = [];
+    let ocorrencias = [];
+    try { const dados = JSON.parse(localStorage.getItem(KEY_OCORRENCIAS) || '[]'); ocorrencias = Array.isArray(dados) ? dados : []; } catch { ocorrencias = []; }
+
+    // ====================== Cultivos e filtros ======================
+    async function carregarCultivos() {
+        try {
+            const resposta = await fetch(`${API}/cultivos`);
+            if (!resposta.ok) throw new Error('Falha ao buscar cultivos');
+            const dados = await resposta.json();
+            cultivos = Array.isArray(dados) ? dados : [];
+        } catch (erro) {
+            console.warn('Não foi possível carregar os cultivos da API:', erro);
+            cultivos = [];
+        }
+        preencherOpcoes();
+        renderOcorrencias();
+    }
+
+    function preencherOpcoes() {
+        const culturasBiblioteca = [...new Set(biblioteca.flatMap(item => item.culturas))].sort((a,b) => a.localeCompare(b, 'pt-BR'));
+        const culturasCultivos = cultivos.map(c => c.cultura).filter(Boolean);
+        const todasCulturas = [...new Set([...culturasBiblioteca, ...culturasCultivos])].sort((a,b) => a.localeCompare(b, 'pt-BR'));
+        $('filtroCultura').innerHTML = '<option value="todas">Todas as culturas</option>' + todasCulturas.map(c => `<option value="${escapar(c)}">${escapar(c)}</option>`).join('');
+        $('ocorrenciaCultivo').innerHTML = '<option value="">Não vincular a um cultivo</option>' + cultivos.map(c => `<option value="${escapar(c.id)}">${escapar(c.cultura)}${c.dataPlantio ? ' — plantio ' + dataBR(c.dataPlantio) : ''}</option>`).join('');
+        atualizarSelectPragas();
+    }
+
+    function atualizarSelectPragas(selecionado = '') {
+        $('ocorrenciaPraga').innerHTML = '<option value="">Selecione a referência</option>' + biblioteca.map(p => `<option value="${p.id}" ${p.id === selecionado ? 'selected' : ''}>${escapar(p.nome)} — ${p.tipo === 'praga' ? 'Praga' : 'Doença'}</option>`).join('');
+    }
+
+    function nomeCultivo(id, fallback = '') {
+        if (id === '' || id === null || id === undefined) return fallback || 'Não vinculado';
+        const c = cultivos.find(x => String(x.id) === String(id));
+        return c ? c.cultura : (fallback || 'Cultivo não encontrado');
+    }
+
+    // ====================== Biblioteca ======================
+    function renderBiblioteca() {
+        const busca = normalizar($('buscaPraga').value.trim());
+        const cultura = $('filtroCultura').value;
+        const tipo = $('filtroTipo').value;
+        const filtrados = biblioteca.filter(p => {
+            const texto = normalizar([p.nome, p.cientifico, p.resumo, ...p.sintomas, ...p.culturas].join(' '));
+            return (!busca || texto.includes(busca)) && (cultura === 'todas' || p.culturas.some(c => normalizar(c) === normalizar(cultura))) && (tipo === 'todos' || p.tipo === tipo);
+        });
+        $('resultadoBiblioteca').textContent = `${filtrados.length} ${filtrados.length === 1 ? 'registro encontrado' : 'registros encontrados'}`;
+        $('gradeBiblioteca').innerHTML = filtrados.length ? filtrados.map(p => `
+            <article class="pest-card">
+                <div class="pest-image-wrap">
+                    <img src="${p.imagem}" alt="Imagem de referência: ${escapar(p.nome)}" loading="lazy" onerror="this.parentElement.classList.add('image-unavailable');this.style.display='none'">
+                    <div class="image-placeholder"><i class="fa-solid ${p.tipo === 'praga' ? 'fa-bug' : 'fa-leaf'}"></i><span>Imagem de referência</span></div>
+                    <span class="type-tag ${p.tipo}">${p.tipo === 'praga' ? 'Praga' : 'Doença'}</span>
+                </div>
+                <div class="pest-card-content">
+                    <div class="pest-card-heading"><h3>${escapar(p.nome)}</h3><span class="crop-count">${p.culturas.length} ${p.culturas.length === 1 ? 'cultura' : 'culturas'}</span></div>
+                    <p class="scientific-name">${escapar(p.cientifico)}</p>
+                    <p class="pest-summary">${escapar(p.resumo)}</p>
+                    <div class="crop-tags">${p.culturas.slice(0,3).map(c => `<span>${escapar(c)}</span>`).join('')}${p.culturas.length > 3 ? `<span>+${p.culturas.length - 3}</span>` : ''}</div>
+                    <div class="pest-card-actions"><button class="btn-card-detail" onclick="verDetalhes('${p.id}')"><i class="fa-solid fa-book-open"></i> Ver informações</button><button class="btn-card-register" title="Registrar ocorrência" onclick="abrirOcorrencia('${p.id}')"><i class="fa-solid fa-plus"></i></button></div>
+                </div>
+            </article>`).join('') : `<div class="empty-state library-empty"><i class="fa-solid fa-magnifying-glass"></i><strong>Nenhum registro encontrado</strong><span>Tente outro nome ou altere os filtros.</span></div>`;
+    }
+
+    function verDetalhes(id) {
+        const p = biblioteca.find(x => x.id === id);
+        if (!p) return;
+        const lista = itens => itens.map(item => `<li>${escapar(item)}</li>`).join('');
+        $('conteudoDetalhes').innerHTML = `
+            <div class="detail-hero">
+                <div class="detail-image"><img src="${p.imagem}" alt="Imagem de referência de ${escapar(p.nome)}" onerror="this.parentElement.classList.add('image-unavailable');this.style.display='none'"><div class="image-placeholder"><i class="fa-solid ${p.tipo === 'praga' ? 'fa-bug' : 'fa-leaf'}"></i></div></div>
+                <div class="detail-title"><span class="type-tag ${p.tipo}">${p.tipo === 'praga' ? 'Praga' : 'Doença'}</span><h2 id="detalheNome">${escapar(p.nome)}</h2><p class="scientific-name">${escapar(p.cientifico)}</p><p>${escapar(p.resumo)}</p><div class="crop-tags">${p.culturas.map(c => `<span>${escapar(c)}</span>`).join('')}</div></div>
+            </div>
+            <div class="detail-sections">
+                <section class="detail-section"><h3><i class="fa-solid fa-magnifying-glass"></i> Características e sintomas</h3><ul>${lista(p.sintomas)}</ul></section>
+                <section class="detail-section"><h3><i class="fa-solid fa-cloud-sun"></i> Condições que favorecem</h3><ul>${lista(p.condicoes)}</ul></section>
+                <section class="detail-section"><h3><i class="fa-solid fa-shield-halved"></i> Prevenção</h3><ul>${lista(p.prevencao)}</ul></section>
+                <section class="detail-section"><h3><i class="fa-solid fa-seedling"></i> Manejo geral</h3><ul>${lista(p.manejo)}</ul></section>
+            </div>
+            <div class="references-box"><h3><i class="fa-solid fa-link"></i> Referências técnicas</h3>${p.referencias.map(r => `<a href="${r.url}" target="_blank" rel="noopener noreferrer">${escapar(r.nome)} <i class="fa-solid fa-arrow-up-right-from-square"></i></a>`).join('')}</div>
+            <div class="detail-warning"><i class="fa-solid fa-triangle-exclamation"></i><span>As imagens e descrições auxiliam a observação, mas não confirmam o diagnóstico. Consulte assistência técnica antes de decidir por qualquer tratamento.</span></div>
+            <div class="detail-footer"><button class="btn-secondary" onclick="fecharModal('modalDetalhes')">Fechar</button><button class="btn-primary" onclick="fecharModal('modalDetalhes');abrirOcorrencia('${p.id}')"><i class="fa-solid fa-clipboard-check"></i> Registrar ocorrência</button></div>`;
+        abrirModal('modalDetalhes');
+    }
+
+    // ====================== Ocorrências ======================
+    function salvarOcorrencias() {
+        try { localStorage.setItem(KEY_OCORRENCIAS, JSON.stringify(ocorrencias)); }
+        catch (erro) { console.error('Erro ao salvar ocorrências:', erro); notificar('Não foi possível salvar. Verifique o espaço disponível no navegador.', true); }
+    }
+
+    function abrirOcorrencia(pragaId = '', idEdicao = '') {
+        $('formOcorrencia').reset();
+        $('ocorrenciaId').value = '';
+        $('ocorrenciaData').value = hojeISO();
+        $('ocorrenciaIntensidade').value = 'media';
+        $('ocorrenciaStatus').value = 'registrada';
+        atualizarSelectPragas(pragaId);
+        $('tituloModalOcorrencia').textContent = idEdicao ? 'Editar ocorrência' : 'Registrar ocorrência';
+        if (idEdicao) {
+            const o = ocorrencias.find(x => String(x.id) === String(idEdicao));
+            if (!o) return;
+            $('ocorrenciaId').value = o.id;
+            $('ocorrenciaPraga').value = o.pragaId;
+            $('ocorrenciaCultivo').value = o.cultivoId ?? '';
+            $('ocorrenciaData').value = o.data || hojeISO();
+            $('ocorrenciaArea').value = o.area || '';
+            $('ocorrenciaIntensidade').value = o.intensidade || 'media';
+            $('ocorrenciaStatus').value = o.status || 'registrada';
+            $('ocorrenciaObservacoes').value = o.observacoes || '';
+        }
+        abrirModal('modalOcorrencia');
+    }
+
+    function salvarOcorrencia(event) {
+        event.preventDefault();
+        const id = $('ocorrenciaId').value;
+        const pragaId = $('ocorrenciaPraga').value;
+        const praga = biblioteca.find(p => p.id === pragaId);
+        if (!praga) { notificar('Selecione uma praga ou doença da biblioteca.', true); return; }
+        const cultivoId = $('ocorrenciaCultivo').value;
+        const registro = {
+            id: id || uid(), pragaId, pragaNome: praga.nome,
+            cultivoId: cultivoId || '', culturaNome: nomeCultivo(cultivoId),
+            data: $('ocorrenciaData').value, area: $('ocorrenciaArea').value.trim(),
+            intensidade: $('ocorrenciaIntensidade').value, status: $('ocorrenciaStatus').value,
+            observacoes: $('ocorrenciaObservacoes').value.trim(), atualizadoEm: new Date().toISOString()
+        };
+        if (id) {
+            const indice = ocorrencias.findIndex(o => String(o.id) === String(id));
+            if (indice >= 0) ocorrencias[indice] = {...ocorrencias[indice], ...registro};
+        } else {
+            registro.criadoEm = new Date().toISOString();
+            ocorrencias.unshift(registro);
+        }
+        salvarOcorrencias();
+        fecharModal('modalOcorrencia');
+        atualizarIndicadores();
+        renderOcorrencias();
+        notificar(id ? 'Ocorrência atualizada.' : 'Ocorrência registrada.');
+    }
+
+    function renderOcorrencias() {
+        if (!$('tabelaOcorrencias')) return;
+        const busca = normalizar($('buscaOcorrencia')?.value || '');
+        const status = $('filtroStatusOcorrencia')?.value || 'todos';
+        const filtradas = ocorrencias.filter(o => {
+            const texto = normalizar([o.pragaNome, nomeCultivo(o.cultivoId, o.culturaNome), o.area, o.observacoes].join(' '));
+            return (!busca || texto.includes(busca)) && (status === 'todos' || o.status === status);
+        });
+        $('tabelaOcorrencias').innerHTML = filtradas.length ? filtradas.map(o => `
+            <tr>
+                <td><strong>${escapar(o.pragaNome || nomePraga(o.pragaId))}</strong><span class="cell-sub">${o.tipo || (biblioteca.find(p=>p.id===o.pragaId)?.tipo === 'doenca' ? 'Doença' : 'Praga')}</span></td>
+                <td>${escapar(nomeCultivo(o.cultivoId, o.culturaNome))}</td>
+                <td>${dataBR(o.data)}</td><td>${escapar(o.area || '—')}</td>
+                <td><span class="severity-badge ${o.intensidade || 'media'}">${nomeIntensidade(o.intensidade)}</span></td>
+                <td><span class="occurrence-status ${o.status || 'registrada'}">${nomeStatus(o.status)}</span></td>
+                <td><div class="table-actions"><button class="btn-mini" title="Consultar informações" onclick="verDetalhes('${o.pragaId}')"><i class="fa-solid fa-eye"></i></button><button class="btn-mini" title="Editar" onclick="abrirOcorrencia('', '${o.id}')"><i class="fa-solid fa-pen"></i></button><button class="btn-mini danger" title="Excluir" onclick="excluirOcorrencia('${o.id}')"><i class="fa-solid fa-trash"></i></button></div></td>
+            </tr>`).join('') : `<tr><td colspan="7"><div class="empty-state"><i class="fa-solid fa-clipboard-list"></i><strong>Nenhuma ocorrência encontrada</strong><span>Registre uma observação para começar seu acompanhamento.</span><button class="btn-primary" onclick="abrirOcorrencia()"><i class="fa-solid fa-plus"></i> Registrar ocorrência</button></div></td></tr>`;
+    }
+
+    function nomePraga(id) { return biblioteca.find(p => p.id === id)?.nome || 'Registro da biblioteca'; }
+    function nomeIntensidade(v) { return ({baixa:'Baixa', media:'Média', alta:'Alta'})[v] || 'Média'; }
+    function nomeStatus(v) { return ({registrada:'Registrada', acompanhamento:'Em acompanhamento', resolvida:'Encerrada'})[v] || 'Registrada'; }
+    function excluirOcorrencia(id) {
+        if (!confirm('Deseja excluir esta ocorrência?')) return;
+        ocorrencias = ocorrencias.filter(o => String(o.id) !== String(id));
+        salvarOcorrencias(); atualizarIndicadores(); renderOcorrencias(); notificar('Ocorrência excluída.');
+    }
+
+    // ====================== Navegação, modais e indicadores ======================
+    function alternarAba(aba) {
+        const bibliotecaAtiva = aba === 'biblioteca';
+        $('painelBiblioteca').style.display = bibliotecaAtiva ? 'flex' : 'none';
+        $('painelOcorrencias').style.display = bibliotecaAtiva ? 'none' : 'flex';
+        document.querySelectorAll('#abasPragas button').forEach(b => b.classList.toggle('active', b.dataset.aba === aba));
+        if (!bibliotecaAtiva) renderOcorrencias();
+    }
+    function abrirModal(id) { $(id).style.display = 'flex'; document.body.classList.add('modal-open'); }
+    function fecharModal(id) {
+        if (id) $(id).style.display = 'none';
+        else ['modalDetalhes','modalOcorrencia'].forEach(x => $(x).style.display = 'none');
+        if (!document.querySelector('.modal-overlay[style*="display: flex"]')) document.body.classList.remove('modal-open');
+    }
+    function fecharModalFora(event, id) { if (event.target.id === id) fecharModal(id); }
+    function notificar(mensagem, erro = false) {
+        const aviso = document.createElement('div'); aviso.className = 'toast' + (erro ? ' erro' : ''); aviso.textContent = mensagem;
+        $('toastBox').appendChild(aviso); setTimeout(() => aviso.remove(), 3500);
+    }
+    function atualizarIndicadores() {
+        $('kpiBiblioteca').textContent = biblioteca.length;
+        $('kpiPragas').textContent = biblioteca.filter(p => p.tipo === 'praga').length;
+        $('kpiDoencas').textContent = biblioteca.filter(p => p.tipo === 'doenca').length;
+        $('kpiOcorrencias').textContent = ocorrencias.filter(o => o.status !== 'resolvida').length;
+        $('contadorOcorrencias').textContent = ocorrencias.length;
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(); });
+    renderBiblioteca();
+    atualizarIndicadores();
+    carregarCultivos();
+</script>
+</body>
+</html>

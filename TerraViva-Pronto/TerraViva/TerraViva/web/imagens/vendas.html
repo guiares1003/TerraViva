@@ -1,0 +1,517 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TerraViva - Vendas</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="vendas.css">
+</head>
+
+<body>
+
+    <!-- MENU LATERAL -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <i class="fa-solid fa-leaf"></i>
+            <span>TerraViva</span>
+        </div>
+
+        <ul class="nav-menu">
+            <li><a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="cultivos.html" class="nav-item"><i class="fa-solid fa-seedling"></i> Cultivos</a></li>
+            <li><a href="calendario.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendário</a></li>
+            <li><a href="clima.html" class="nav-item"><i class="fa-solid fa-cloud-sun-rain"></i> Clima</a></li>
+            <li><a href="estoque.html" class="nav-item"><i class="fa-solid fa-boxes-stacked"></i> Estoque</a></li>
+            <li><a href="financeiro.html" class="nav-item"><i class="fa-solid fa-sack-dollar"></i> Financeiro</a></li>
+            <li><a href="vendas.html" class="nav-item active"><i class="fa-solid fa-cart-shopping"></i> Vendas</a></li>
+            <li><a href="#" class="nav-item"><i class="fa-solid fa-list-check"></i> Atividades</a></li>
+            <li><a href="#" class="nav-item"><i class="fa-solid fa-bug"></i> Pragas</a></li>
+            <li><a href="#" class="nav-item"><i class="fa-solid fa-recycle"></i> Sustentabilidade</a></li>
+        </ul>
+
+        <div class="user-profile-sidebar">
+            <div class="avatar" id="userAvatar">GA</div>
+
+            <div class="user-info">
+                <h4 id="userName">Produtor</h4>
+                <p>Fazenda Esperança</p>
+            </div>
+
+            <i class="fa-solid fa-gear"
+               style="margin-left:auto;color:var(--text-muted);cursor:pointer;"
+               onclick="window.location.href='login.html'"></i>
+        </div>
+
+    </aside>
+
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content">
+
+        <header class="top-header">
+
+            <div class="greeting">
+                <h1>Gestão de Vendas</h1>
+                <p>Controle a comercialização dos seus produtos agrícolas.</p>
+            </div>
+
+            <div class="header-actions">
+
+                <button class="btn-outline" onclick="abrirCliente()">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Novo Cliente
+                </button>
+
+                <button class="btn-primary" onclick="abrirVenda()">
+                    <i class="fa-solid fa-plus"></i>
+                    Registrar Venda
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- INDICADORES -->
+        <section class="kpi-grid">
+
+            <div class="glass-panel kpi-card">
+                <div class="kpi-header">
+                    <span>Total vendido</span>
+                    <i class="fa-solid fa-sack-dollar"></i>
+                </div>
+
+                <div class="kpi-value" id="kpiVendido">R$ 0,00</div>
+
+                <div class="kpi-footer">Valor comercializado</div>
+            </div>
+
+
+            <div class="glass-panel kpi-card ok">
+                <div class="kpi-header">
+                    <span>Recebido</span>
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+
+                <div class="kpi-value" id="kpiRecebido">R$ 0,00</div>
+
+                <div class="kpi-footer">Vendas pagas</div>
+            </div>
+
+
+            <div class="glass-panel kpi-card warn">
+                <div class="kpi-header">
+                    <span>A receber</span>
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+
+                <div class="kpi-value" id="kpiPendente">R$ 0,00</div>
+
+                <div class="kpi-footer">Vendas pendentes</div>
+            </div>
+
+
+            <div class="glass-panel kpi-card">
+                <div class="kpi-header">
+                    <span>Quantidade de vendas</span>
+                    <i class="fa-solid fa-basket-shopping"></i>
+                </div>
+
+                <div class="kpi-value" id="kpiQuantidade">0</div>
+
+                <div class="kpi-footer">Vendas registradas</div>
+            </div>
+
+        </section>
+
+
+        <!-- HISTÓRICO DE VENDAS -->
+        <section class="glass-panel content-panel">
+
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa-solid fa-clock-rotate-left"
+                       style="color:var(--accent-primary);"></i>
+                    Histórico de vendas
+                </div>
+            </div>
+
+
+            <!-- FILTROS -->
+            <div class="toolbar">
+
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"
+                       style="color:var(--text-muted);"></i>
+
+                    <input
+                        type="text"
+                        id="buscaVenda"
+                        placeholder="Buscar cliente ou produto..."
+                        oninput="renderVendas()">
+                </div>
+
+
+                <div class="search-box">
+
+                    <select class="filter-select"
+                            id="filtroStatus"
+                            onchange="renderVendas()">
+
+                        <option value="todos">Todas as vendas</option>
+                        <option value="pago">Pagas</option>
+                        <option value="pendente">Pendentes</option>
+
+                    </select>
+
+
+                    <select class="filter-select"
+                            id="filtroCultura"
+                            onchange="renderVendas()">
+
+                        <option value="todas">Todas as culturas</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- TABELA -->
+            <div class="table-wrap" id="areaTabela">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Cliente</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Total</th>
+                            <th>Pagamento</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabelaVendas">
+
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    Nenhuma venda registrada.
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- MODAL: REGISTRAR VENDA -->
+    <div class="modal-overlay" id="modalVenda">
+
+        <div class="modal-content modal-lg modal-venda">
+
+            <div class="modal-header">
+                <span id="tituloModalVenda">Registrar nova venda</span>
+
+                <i class="fa-solid fa-xmark"
+                   onclick="fecharModais()"></i>
+            </div>
+
+
+            <form id="formVenda" onsubmit="salvarVenda(event)">
+
+                <input type="hidden" id="vId">
+
+
+                <div class="form-group">
+                    <label for="vCliente">Cliente</label>
+
+                    <div class="campo-cliente">
+                        <select id="vCliente" required>
+                            <option value="">Selecione um cliente</option>
+                        </select>
+
+                        <button type="button"
+                                class="btn-add-cliente"
+                                onclick="abrirCliente()">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="vProduto">Produto vendido</label>
+
+                    <select id="vProduto"
+                            required
+                            onchange="atualizarProdutoVenda()">
+
+                        <option value="">Selecione um produto do estoque</option>
+
+                    </select>
+
+                    <div class="form-hint" id="vEstoqueDisponivel">
+                        Selecione um produto para consultar o estoque disponível.
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="vCultura">Cultura</label>
+
+                    <input
+                        type="text"
+                        id="vCultura"
+                        list="listaCulturas"
+                        placeholder="Ex: Tomate">
+
+                    <datalist id="listaCulturas"></datalist>
+
+                    <div class="form-hint">
+                        Associe a venda a uma cultura para consultar o histórico.
+                    </div>
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="vQuantidade">Quantidade</label>
+
+                        <input
+                            type="number"
+                            id="vQuantidade"
+                            required
+                            min="0.001"
+                            step="0.001"
+                            placeholder="0"
+                            oninput="calcularTotal()">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="vPreco">Preço unitário (R$)</label>
+
+                        <input
+                            type="number"
+                            id="vPreco"
+                            required
+                            min="0.01"
+                            step="0.01"
+                            placeholder="0,00"
+                            oninput="calcularTotal()">
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+                    <label for="vTotal">Valor total da venda</label>
+
+                    <input
+                        type="text"
+                        id="vTotal"
+                        value="R$ 0,00"
+                        readonly>
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="vData">Data da venda</label>
+
+                        <input type="date" id="vData" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="vPagamento">Forma de pagamento</label>
+
+                        <select id="vPagamento" required>
+                            <option value="">Selecione</option>
+                            <option value="Pix">Pix</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                            <option value="Cartão">Cartão</option>
+                            <option value="Transferência">Transferência</option>
+                            <option value="A prazo">A prazo</option>
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+                    <label for="vStatus">Situação do pagamento</label>
+
+                    <select id="vStatus" required>
+                        <option value="pendente">Pendente</option>
+                        <option value="pago">Pago</option>
+                    </select>
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn-secondary"
+                            onclick="fecharModais()">
+                        Cancelar
+                    </button>
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-check"></i>
+                        Salvar venda
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL: CADASTRAR CLIENTE -->
+    <div class="modal-overlay" id="modalCliente">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <span>Cadastrar cliente</span>
+
+                <i class="fa-solid fa-xmark"
+                   onclick="fecharModais()"></i>
+            </div>
+
+
+            <form id="formCliente" onsubmit="salvarCliente(event)">
+
+                <div class="form-group">
+                    <label for="cNome">Nome do cliente</label>
+
+                    <input
+                        type="text"
+                        id="cNome"
+                        required
+                        placeholder="Ex: Mercado do João">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="cTelefone">Telefone</label>
+
+                    <input
+                        type="tel"
+                        id="cTelefone"
+                        placeholder="(00) 00000-0000">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="cEmail">E-mail</label>
+
+                    <input
+                        type="email"
+                        id="cEmail"
+                        placeholder="cliente@email.com">
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn-secondary"
+                            onclick="fecharModais()">
+                        Cancelar
+                    </button>
+
+                    <button type="submit" class="btn-primary">
+                        Cadastrar cliente
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL: REGISTRAR RECEBIMENTO -->
+    <div class="modal-overlay" id="modalRecebimento">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <span>Registrar recebimento</span>
+
+                <i class="fa-solid fa-xmark"
+                   onclick="fecharModais()"></i>
+            </div>
+
+
+            <form id="formRecebimento" onsubmit="salvarRecebimento(event)">
+
+                <input type="hidden" id="recebimentoId">
+
+                <p id="resumoRecebimento"></p>
+
+                <div class="form-group">
+                    <label for="dataRecebimento">Data do recebimento</label>
+
+                    <input type="date" id="dataRecebimento" required>
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn-secondary"
+                            onclick="fecharModais()">
+                        Cancelar
+                    </button>
+
+                    <button type="submit" class="btn-primary">
+                        Confirmar recebimento
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div id="toastBox"></div>
+
+
+    <!-- O JAVASCRIPT SERÁ IMPLEMENTADO NA PRÓXIMA ETAPA -->
+
+</body>
+</html>

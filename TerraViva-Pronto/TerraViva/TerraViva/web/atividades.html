@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraViva - Atividades</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="atividades.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><i class="fa-solid fa-leaf"></i><span>TerraViva</span></div>
+        <ul class="nav-menu">
+            <li><a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="cultivos.html" class="nav-item"><i class="fa-solid fa-seedling"></i> Cultivos</a></li>
+            <li><a href="calendario.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendário</a></li>
+            <li><a href="clima.html" class="nav-item"><i class="fa-solid fa-cloud-sun-rain"></i> Clima</a></li>
+            <li><a href="estoque.html" class="nav-item"><i class="fa-solid fa-boxes-stacked"></i> Estoque</a></li>
+            <li><a href="financeiro.html" class="nav-item"><i class="fa-solid fa-sack-dollar"></i> Financeiro</a></li>
+            <li><a href="vendas.html" class="nav-item"><i class="fa-solid fa-cart-shopping"></i> Vendas</a></li>
+            <li><a href="atividades.html" class="nav-item active"><i class="fa-solid fa-list-check"></i> Atividades</a></li>
+            <li><a href="pragas.html" class="nav-item"><i class="fa-solid fa-bug"></i> Pragas</a></li>
+            <li><a href="sustentabilidade.html" class="nav-item"><i class="fa-solid fa-recycle"></i> Sustentabilidade</a></li>
+        </ul>
+        <div class="user-profile-sidebar">
+            <div class="avatar" id="userAvatar">GA</div>
+            <div class="user-info"><h4 id="userName">Produtor</h4><p>Fazenda Esperança</p></div>
+            <i class="fa-solid fa-gear" style="margin-left:auto;color:var(--text-muted);cursor:pointer;" onclick="window.location.href='login.html'"></i>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="greeting">
+                <h1>Gerenciamento de Atividades</h1>
+                <p>Organize e acompanhe as tarefas da sua propriedade rural.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-outline" onclick="mostrarHistorico()"><i class="fa-solid fa-clock-rotate-left"></i> Histórico</button>
+                <button class="btn-primary" onclick="abrirAtividade()"><i class="fa-solid fa-plus"></i> Nova atividade</button>
+            </div>
+        </header>
+
+        <section class="kpi-grid">
+            <div class="glass-panel kpi-card"><div class="kpi-header"><span>Total de atividades</span><i class="fa-solid fa-list-check"></i></div><div class="kpi-value" id="kpiTotal">0</div><div class="kpi-footer">Atividades cadastradas</div></div>
+            <div class="glass-panel kpi-card warn"><div class="kpi-header"><span>Pendentes</span><i class="fa-solid fa-clock"></i></div><div class="kpi-value" id="kpiPendente">0</div><div class="kpi-footer">Aguardando execução</div></div>
+            <div class="glass-panel kpi-card"><div class="kpi-header"><span>Em andamento</span><i class="fa-solid fa-spinner"></i></div><div class="kpi-value" id="kpiAndamento">0</div><div class="kpi-footer">Atividades em execução</div></div>
+            <div class="glass-panel kpi-card ok"><div class="kpi-header"><span>Concluídas</span><i class="fa-solid fa-circle-check"></i></div><div class="kpi-value" id="kpiConcluida">0</div><div class="kpi-footer">Trabalhos realizados</div></div>
+        </section>
+
+        <section class="glass-panel content-panel" id="painelAtividades">
+            <div class="panel-header">
+                <div class="panel-title"><i class="fa-solid fa-clipboard-list"></i> Lista de atividades</div>
+                <span class="total-registros" id="totalRegistros">0 registros</span>
+            </div>
+            <div class="toolbar">
+                <div class="search-box"><i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted);"></i><input type="text" id="buscaAtividade" placeholder="Buscar atividade ou responsável..." oninput="renderAtividades()"></div>
+                <div class="filtros-atividade">
+                    <select class="filter-select" id="filtroStatus" onchange="renderAtividades()">
+                        <option value="todos">Todos os status</option><option value="pendente">Pendente</option><option value="andamento">Em andamento</option><option value="concluida">Concluída</option><option value="atrasada">Atrasada</option>
+                    </select>
+                    <select class="filter-select" id="filtroPrioridade" onchange="renderAtividades()">
+                        <option value="todas">Todas as prioridades</option><option value="alta">Alta</option><option value="media">Média</option><option value="baixa">Baixa</option>
+                    </select>
+                    <select class="filter-select" id="filtroCultura" onchange="renderAtividades()"><option value="todas">Todas as culturas</option></select>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Atividade</th><th>Cultura</th><th>Data prevista</th><th>Responsável</th><th>Prioridade</th><th>Status</th><th>Ações</th></tr></thead>
+                    <tbody id="tabelaAtividades"><tr><td colspan="7"><div class="empty-state">Nenhuma atividade cadastrada.</div></td></tr></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="glass-panel content-panel" id="painelHistorico" style="display:none;">
+            <div class="panel-header">
+                <div class="panel-title"><i class="fa-solid fa-clock-rotate-left"></i> Histórico de atividades concluídas</div>
+                <button class="btn-outline" onclick="ocultarHistorico()"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+            </div>
+            <div class="toolbar">
+                <div class="search-box"><i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted);"></i><input type="text" id="buscaHistorico" placeholder="Buscar atividade ou responsável..." oninput="renderHistorico()"></div>
+                <select class="filter-select" id="filtroHistoricoCultura" onchange="renderHistorico()"><option value="todas">Todas as culturas</option></select>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Atividade</th><th>Cultura</th><th>Responsável</th><th>Data prevista</th><th>Data de conclusão</th><th>Observações</th><th>Ações</th></tr></thead>
+                    <tbody id="tabelaHistorico"><tr><td colspan="7">Nenhuma atividade concluída.</td></tr></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="modalAtividade">
+        <div class="modal-content modal-lg">
+            <div class="modal-header"><span id="tituloModal">Nova atividade</span><i class="fa-solid fa-xmark" style="cursor:pointer;color:var(--text-muted);" onclick="fecharModal()"></i></div>
+            <form id="formAtividade" onsubmit="salvarAtividade(event)">
+                <input type="hidden" id="atividadeId">
+                <div class="form-group"><label for="nomeAtividade">Nome da atividade</label><input type="text" id="nomeAtividade" required maxlength="120" placeholder="Ex: Preparar o solo"></div>
+                <div class="form-group"><label for="descricaoAtividade">Descrição</label><textarea id="descricaoAtividade" rows="3" placeholder="Descreva o que precisa ser realizado..."></textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label for="culturaAtividade">Cultura relacionada</label><select id="culturaAtividade"><option value="">Sem cultura específica</option></select></div>
+                    <div class="form-group"><label for="dataAtividade">Data prevista</label><input type="date" id="dataAtividade" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label for="responsavelAtividade">Responsável</label><input type="text" id="responsavelAtividade" required maxlength="100" placeholder="Nome do responsável"></div>
+                    <div class="form-group"><label for="prioridadeAtividade">Prioridade</label><select id="prioridadeAtividade" required><option value="baixa">Baixa</option><option value="media" selected>Média</option><option value="alta">Alta</option></select></div>
+                </div>
+                <div class="form-group"><label for="statusAtividade">Status</label><select id="statusAtividade" required><option value="pendente">Pendente</option><option value="andamento">Em andamento</option><option value="concluida">Concluída</option></select></div>
+                <div class="form-group"><label for="observacoesAtividade">Observações</label><textarea id="observacoesAtividade" rows="3" placeholder="Informações adicionais..."></textarea></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-check"></i> Salvar atividade</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastBox"></div>
+
+<script>
+    // =============================================
+    // CONFIGURAÇÕES E ESTADO
+    // =============================================
+    const API = 'http://localhost:8080/api';
+    const KEY_ATIVIDADES = 'terraviva_atividades';
+    let atividades = [];
+    let cultivos = [];
+    const $ = id => document.getElementById(id);
+
+    const hojeISO = () => {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    };
+    const gerarId = () => `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+    const escapar = valor => String(valor ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const formatarData = data => data ? data.split('-').reverse().join('/') : '—';
+
+    function lerAtividades() {
+        try {
+            const dados = JSON.parse(localStorage.getItem(KEY_ATIVIDADES) || '[]');
+            atividades = Array.isArray(dados) ? dados : [];
+        } catch (erro) {
+            console.error('Erro ao ler atividades:', erro);
+            atividades = [];
+        }
+    }
+
+    function salvarDados() {
+        localStorage.setItem(KEY_ATIVIDADES, JSON.stringify(atividades));
+    }
+
+    function notificar(mensagem, erro = false) {
+        const caixa = $('toastBox');
+        const aviso = document.createElement('div');
+        aviso.className = erro ? 'toast erro' : 'toast';
+        aviso.textContent = mensagem;
+        caixa.appendChild(aviso);
+        setTimeout(() => aviso.remove(), 3500);
+    }
+
+    function statusAtual(atividade) {
+        if (atividade.status === 'concluida') return 'concluida';
+        if (atividade.dataPrevista && atividade.dataPrevista < hojeISO()) return 'atrasada';
+        return atividade.status || 'pendente';
+    }
+
+    function nomeStatus(status) {
+        return ({pendente:'Pendente', andamento:'Em andamento', concluida:'Concluída', atrasada:'Atrasada'})[status] || status;
+    }
+
+    function nomePrioridade(prioridade) {
+        return ({alta:'Alta', media:'Média', baixa:'Baixa'})[prioridade] || prioridade;
+    }
+
+    // =============================================
+    // CULTIVOS: MESMA API USADA PELO CALENDÁRIO
+    // =============================================
+    async function carregarCultivos() {
+        try {
+            const resposta = await fetch(`${API}/cultivos`);
+            if (!resposta.ok) throw new Error('Não foi possível consultar os cultivos.');
+            cultivos = await resposta.json();
+        } catch (erro) {
+            console.warn('Cultivos indisponíveis:', erro);
+            cultivos = [];
+        }
+        preencherCultivos();
+    }
+
+    function preencherCultivos() {
+        const opcoes = cultivos.map(c => `<option value="${escapar(c.id)}">${escapar(c.cultura)}</option>`).join('');
+        $('culturaAtividade').innerHTML = `<option value="">Sem cultura específica</option>${opcoes}`;
+        $('filtroCultura').innerHTML = `<option value="todas">Todas as culturas</option>${opcoes}`;
+        $('filtroHistoricoCultura').innerHTML = `<option value="todas">Todas as culturas</option>${opcoes}`;
+    }
+
+    function nomeCultura(id) {
+        if (id === '' || id == null) return 'Geral';
+        const cultivo = cultivos.find(c => String(c.id) === String(id));
+        return cultivo ? cultivo.cultura : 'Cultura não encontrada';
+    }
+
+    // =============================================
+    // MODAL E FORMULÁRIO
+    // =============================================
+    function abrirAtividade(id = null) {
+        $('formAtividade').reset();
+        $('atividadeId').value = '';
+        $('tituloModal').textContent = id ? 'Editar atividade' : 'Nova atividade';
+        $('dataAtividade').value = hojeISO();
+        $('prioridadeAtividade').value = 'media';
+        $('statusAtividade').value = 'pendente';
+
+        if (id) {
+            const atividade = atividades.find(a => String(a.id) === String(id));
+            if (!atividade) return;
+            $('atividadeId').value = atividade.id;
+            $('nomeAtividade').value = atividade.nome || '';
+            $('descricaoAtividade').value = atividade.descricao || '';
+            $('culturaAtividade').value = atividade.culturaId ?? '';
+            $('dataAtividade').value = atividade.dataPrevista || '';
+            $('responsavelAtividade').value = atividade.responsavel || '';
+            $('prioridadeAtividade').value = atividade.prioridade || 'media';
+            $('statusAtividade').value = atividade.status === 'concluida' ? 'concluida' : (atividade.status || 'pendente');
+            $('observacoesAtividade').value = atividade.observacoes || '';
+        }
+        $('modalAtividade').style.display = 'flex';
+    }
+
+    function fecharModal() {
+        $('modalAtividade').style.display = 'none';
+    }
+
+    function salvarAtividade(event) {
+        event.preventDefault();
+        const id = $('atividadeId').value;
+        const status = $('statusAtividade').value;
+        const atividade = {
+            id: id || gerarId(),
+            nome: $('nomeAtividade').value.trim(),
+            descricao: $('descricaoAtividade').value.trim(),
+            culturaId: $('culturaAtividade').value,
+            culturaNome: nomeCultura($('culturaAtividade').value),
+            dataPrevista: $('dataAtividade').value,
+            responsavel: $('responsavelAtividade').value.trim(),
+            prioridade: $('prioridadeAtividade').value,
+            status,
+            observacoes: $('observacoesAtividade').value.trim(),
+            dataCriacao: id ? (atividades.find(a => String(a.id) === String(id))?.dataCriacao || hojeISO()) : hojeISO(),
+            dataConclusao: status === 'concluida' ? (atividades.find(a => String(a.id) === String(id))?.dataConclusao || hojeISO()) : ''
+        };
+
+        if (!atividade.nome || !atividade.dataPrevista || !atividade.responsavel) {
+            notificar('Preencha nome, data prevista e responsável.', true);
+            return;
+        }
+
+        if (id) {
+            const indice = atividades.findIndex(a => String(a.id) === String(id));
+            if (indice !== -1) atividades[indice] = atividade;
+        } else {
+            atividades.push(atividade);
+        }
+
+        salvarDados();
+        fecharModal();
+        renderAtividades();
+        notificar(id ? 'Atividade atualizada com sucesso!' : 'Atividade cadastrada com sucesso!');
+    }
+
+    // =============================================
+    // AÇÕES DA LISTA
+    // =============================================
+    function concluirAtividade(id) {
+        const atividade = atividades.find(a => String(a.id) === String(id));
+        if (!atividade) return;
+        atividade.status = 'concluida';
+        atividade.dataConclusao = hojeISO();
+        salvarDados();
+        renderAtividades();
+        notificar('Atividade marcada como concluída!');
+    }
+
+    function reabrirAtividade(id) {
+        const atividade = atividades.find(a => String(a.id) === String(id));
+        if (!atividade) return;
+        atividade.status = 'pendente';
+        atividade.dataConclusao = '';
+        salvarDados();
+        renderAtividades();
+        renderHistorico();
+        notificar('Atividade reaberta.');
+    }
+
+    function excluirAtividade(id) {
+        const atividade = atividades.find(a => String(a.id) === String(id));
+        if (!atividade) return;
+        if (!confirm(`Deseja excluir a atividade "${atividade.nome}"?`)) return;
+        atividades = atividades.filter(a => String(a.id) !== String(id));
+        salvarDados();
+        renderAtividades();
+        renderHistorico();
+        notificar('Atividade excluída.');
+    }
+
+    // =============================================
+    // INDICADORES E LISTAGEM
+    // =============================================
+    function atualizarIndicadores() {
+        $('kpiTotal').textContent = atividades.length;
+        $('kpiPendente').textContent = atividades.filter(a => statusAtual(a) === 'pendente' || statusAtual(a) === 'atrasada').length;
+        $('kpiAndamento').textContent = atividades.filter(a => statusAtual(a) === 'andamento').length;
+        $('kpiConcluida').textContent = atividades.filter(a => statusAtual(a) === 'concluida').length;
+    }
+
+    function renderAtividades() {
+        lerAtividades();
+        atualizarIndicadores();
+        const busca = $('buscaAtividade').value.trim().toLowerCase();
+        const filtroStatus = $('filtroStatus').value;
+        const filtroPrioridade = $('filtroPrioridade').value;
+        const filtroCultura = $('filtroCultura').value;
+
+        const lista = atividades.filter(a => {
+            const status = statusAtual(a);
+            const texto = `${a.nome || ''} ${a.responsavel || ''} ${a.descricao || ''}`.toLowerCase();
+            return texto.includes(busca) &&
+                (filtroStatus === 'todos' || status === filtroStatus) &&
+                (filtroPrioridade === 'todas' || a.prioridade === filtroPrioridade) &&
+                (filtroCultura === 'todas' || String(a.culturaId) === String(filtroCultura));
+        }).sort((a,b) => (a.dataPrevista || '').localeCompare(b.dataPrevista || ''));
+
+        $('totalRegistros').textContent = `${lista.length} registro(s)`;
+        const corpo = $('tabelaAtividades');
+        if (!lista.length) {
+            corpo.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="fa-solid fa-clipboard-check"></i> Nenhuma atividade encontrada.</div></td></tr>';
+            return;
+        }
+
+        corpo.innerHTML = lista.map(a => {
+            const status = statusAtual(a);
+            return `<tr>
+                <td><strong>${escapar(a.nome)}</strong>${a.descricao ? `<div class="cell-sub">${escapar(a.descricao)}</div>` : ''}</td>
+                <td>${escapar(a.culturaNome || nomeCultura(a.culturaId))}</td>
+                <td>${formatarData(a.dataPrevista)}</td>
+                <td>${escapar(a.responsavel)}</td>
+                <td><span class="prioridade prioridade-${escapar(a.prioridade)}">${nomePrioridade(a.prioridade)}</span></td>
+                <td><span class="status status-${status}">${nomeStatus(status)}</span></td>
+                <td class="acoes-atividade">
+                    <button type="button" class="btn-mini" title="Editar" onclick="abrirAtividade('${escapar(a.id)}')"><i class="fa-solid fa-pen"></i></button>
+                    ${status !== 'concluida' ? `<button type="button" class="btn-mini" title="Concluir" onclick="concluirAtividade('${escapar(a.id)}')"><i class="fa-solid fa-check"></i></button>` : `<button type="button" class="btn-mini" title="Reabrir" onclick="reabrirAtividade('${escapar(a.id)}')"><i class="fa-solid fa-rotate-left"></i></button>`}
+                    <button type="button" class="btn-mini" title="Excluir" onclick="excluirAtividade('${escapar(a.id)}')"><i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    // =============================================
+    // HISTÓRICO DE CONCLUÍDAS
+    // =============================================
+    function mostrarHistorico() {
+        $('painelAtividades').style.display = 'none';
+        $('painelHistorico').style.display = 'block';
+        $('buscaHistorico').value = '';
+        $('filtroHistoricoCultura').value = 'todas';
+        renderHistorico();
+    }
+
+    function ocultarHistorico() {
+        $('painelHistorico').style.display = 'none';
+        $('painelAtividades').style.display = 'block';
+    }
+
+    function renderHistorico() {
+        lerAtividades();
+        const busca = $('buscaHistorico').value.trim().toLowerCase();
+        const cultura = $('filtroHistoricoCultura').value;
+        const lista = atividades.filter(a => a.status === 'concluida').filter(a => {
+            const texto = `${a.nome || ''} ${a.responsavel || ''} ${a.observacoes || ''}`.toLowerCase();
+            return texto.includes(busca) && (cultura === 'todas' || String(a.culturaId) === String(cultura));
+        }).sort((a,b) => (b.dataConclusao || '').localeCompare(a.dataConclusao || ''));
+
+        const corpo = $('tabelaHistorico');
+        if (!lista.length) {
+            corpo.innerHTML = '<tr><td colspan="7"><div class="empty-state">Nenhuma atividade concluída encontrada.</div></td></tr>';
+            return;
+        }
+        corpo.innerHTML = lista.map(a => `<tr>
+            <td><strong>${escapar(a.nome)}</strong></td>
+            <td>${escapar(a.culturaNome || nomeCultura(a.culturaId))}</td>
+            <td>${escapar(a.responsavel)}</td>
+            <td>${formatarData(a.dataPrevista)}</td>
+            <td>${formatarData(a.dataConclusao)}</td>
+            <td>${escapar(a.observacoes || '—')}</td>
+            <td><button type="button" class="btn-mini" title="Reabrir atividade" onclick="reabrirAtividade('${escapar(a.id)}')"><i class="fa-solid fa-rotate-left"></i></button></td>
+        </tr>`).join('');
+    }
+
+    // =============================================
+    // INICIALIZAÇÃO
+    // =============================================
+    document.addEventListener('DOMContentLoaded', async () => {
+        const nomeUsuario = localStorage.getItem('usuarioLogado');
+        if (nomeUsuario) {
+            $('userName').textContent = nomeUsuario;
+            $('userAvatar').textContent = nomeUsuario.split(' ').map(p => p[0]).join('').substring(0,2).toUpperCase();
+        }
+        lerAtividades();
+        await carregarCultivos();
+        renderAtividades();
+        window.addEventListener('storage', event => {
+            if (event.key === KEY_ATIVIDADES) renderAtividades();
+        });
+    });
+
+    $('modalAtividade').addEventListener('click', event => {
+        if (event.target === $('modalAtividade')) fecharModal();
+    });
+</script>
+</body>
+</html>

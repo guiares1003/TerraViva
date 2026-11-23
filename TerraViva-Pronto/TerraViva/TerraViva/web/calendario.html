@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraViva - Calendário</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="calendario.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">
+            <i class="fa-solid fa-leaf"></i>
+            <span>TerraViva</span>
+        </div>
+
+        <ul class="nav-menu">
+            <li><a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="cultivos.html" class="nav-item"><i class="fa-solid fa-seedling"></i> Cultivos</a></li>
+            <li><a href="calendario.html" class="nav-item active"><i class="fa-regular fa-calendar"></i> Calendário</a></li>
+            <li><a href="clima.html" class="nav-item"><i class="fa-solid fa-cloud-sun-rain"></i> Clima</a></li>
+            <li><a href="estoque.html" class="nav-item"><i class="fa-solid fa-boxes-stacked"></i> Estoque</a></li>
+            <li><a href="financeiro.html" class="nav-item"><i class="fa-solid fa-sack-dollar"></i> Financeiro</a></li>
+            <li><a href="vendas.html" class="nav-item"><i class="fa-solid fa-cart-shopping"></i> Vendas</a></li>
+            <li><a href="atividades.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Atividades</a></li>
+            <li><a href="pragas.html" class="nav-item"><i class="fa-solid fa-bug"></i> Pragas</a></li>
+            <li><a href="sustentabilidade.html" class="nav-item"><i class="fa-solid fa-recycle"></i> Sustentabilidade</a></li>
+        </ul>
+
+        <div class="user-profile-sidebar">
+            <div class="avatar" id="userAvatar">GA</div>
+            <div class="user-info">
+                <h4 id="userName">Produtor</h4>
+                <p>Fazenda Esperança</p>
+            </div>
+            <i class="fa-solid fa-gear" style="margin-left: auto; color: var(--text-muted); cursor: pointer;" onclick="window.location.href='login.html'"></i>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="greeting">
+                <h1>Calendário da Propriedade</h1>
+                <p>Planeje plantios, colheitas, irrigação, adubação e demais cuidados com as suas culturas.</p>
+            </div>
+            <button class="btn-primary" onclick="abrirModalNovo()">
+                <i class="fa-solid fa-plus"></i> Novo Evento
+            </button>
+        </header>
+
+        <!-- Barra de ferramentas: navegação, visualização e filtro -->
+        <div class="glass-panel cal-toolbar">
+            <div class="cal-nav">
+                <button class="icon-btn" onclick="navegar(-1)" title="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="icon-btn" onclick="irHoje()" title="Hoje" style="width:auto;padding:0 14px;font-size:13px;">Hoje</button>
+                <button class="icon-btn" onclick="navegar(1)" title="Próximo"><i class="fa-solid fa-chevron-right"></i></button>
+                <div class="cal-title" id="calTitulo"></div>
+            </div>
+
+            <div class="view-switch" id="viewSwitch">
+                <button data-visao="mes" class="active">Mês</button>
+                <button data-visao="semana">Semana</button>
+                <button data-visao="dia">Dia</button>
+            </div>
+
+            <div class="filter-box">
+                <i class="fa-solid fa-filter"></i>
+                <select id="filtroCultura" onchange="mudarFiltro()">
+                    <option value="todas">Todas as culturas</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="legend" id="legenda"></div>
+
+        <div class="glass-panel cal-panel" id="calView"></div>
+    </main>
+
+    <!-- Modal de evento -->
+    <div class="modal-overlay" id="modalEvento">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <span id="modalEventoTitulo">Novo Evento</span>
+                <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" onclick="fecharModal()"></i>
+            </div>
+            <form id="formEvento" onsubmit="salvarEvento(event)">
+                <input type="hidden" id="evId">
+
+                <div class="form-group">
+                    <label for="evTitulo">Título</label>
+                    <input type="text" id="evTitulo" required placeholder="Ex: Irrigar canteiro 2">
+                </div>
+
+                <div class="form-row" style="margin-top:14px;">
+                    <div class="form-group">
+                        <label for="evTipo">Tipo de atividade</label>
+                        <select id="evTipo"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="evCultura">Cultura vinculada</label>
+                        <select id="evCultura">
+                            <option value="">Sem cultura</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top:14px;">
+                    <div class="form-group">
+                        <label for="evData">Data</label>
+                        <input type="date" id="evData" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="evHora">Horário</label>
+                        <input type="time" id="evHora">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:14px;">
+                    <label for="evLembrete">Lembrete</label>
+                    <select id="evLembrete">
+                        <option value="">Sem lembrete</option>
+                        <option value="0">Na hora do evento</option>
+                        <option value="15">15 minutos antes</option>
+                        <option value="60">1 hora antes</option>
+                        <option value="1440">1 dia antes</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-top:14px;">
+                    <label for="evObs">Observações</label>
+                    <textarea id="evObs" placeholder="Ex: usar 20 L de água por metro"></textarea>
+                </div>
+
+                <div class="form-row" style="margin-top:14px;">
+                    <div class="form-group">
+                        <label for="evInsumo">Insumo utilizado (estoque)</label>
+                        <select id="evInsumo" onchange="atualizarUnInsumo()"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="evInsumoQtd">Quantidade usada <span id="evInsumoUn"></span></label>
+                        <input type="number" id="evInsumoQtd" min="0" step="any" placeholder="Ex: 2.5">
+                    </div>
+                </div>
+                <p id="evInsumoAviso" style="font-size:12px;color:var(--text-muted);margin-top:6px;">
+                    Opcional. Ao marcar a atividade como concluída, você poderá descontar o insumo do estoque.
+                </p>
+
+                <div class="form-group check-line" style="margin-top:14px;">
+                    <input type="checkbox" id="evConcluido">
+                    <label for="evConcluido" style="margin:0;">Atividade concluída</label>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-danger" id="btnExcluirEvento" style="display:none;" onclick="excluirEvento()">
+                        <i class="fa-regular fa-trash-can"></i> Excluir
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastBox"></div>
+
+    <script>
+        /* ================= Usuário (igual às outras páginas) ================= */
+        const nomeUsuario = localStorage.getItem('usuarioLogado');
+        if (nomeUsuario) {
+            document.getElementById('userName').textContent = nomeUsuario;
+            const iniciais = nomeUsuario.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            document.getElementById('userAvatar').textContent = iniciais;
+        }
+
+        /* ================= Configuração ================= */
+        const API = 'http://localhost:8080/api';
+        const KEY_EVENTOS = 'terraviva_eventos';
+        const KEY_AVISADOS = 'terraviva_lembretes_avisados';
+        const KEY_ESTOQUE = 'terraviva_estoque';              // mesma chave da página Estoque
+        const KEY_MOVS = 'terraviva_movimentacoes';
+
+        const TIPOS = {
+            plantio:   { nome: 'Plantio',     icone: 'fa-seedling' },
+            colheita:  { nome: 'Colheita',    icone: 'fa-wheat-awn' },
+            irrigacao: { nome: 'Irrigação',   icone: 'fa-droplet' },
+            adubacao:  { nome: 'Adubação',    icone: 'fa-flask' },
+            defensivo: { nome: 'Defensivos',  icone: 'fa-spray-can-sparkles' },
+            poda:      { nome: 'Poda',        icone: 'fa-scissors' },
+            inspecao:  { nome: 'Inspeção',    icone: 'fa-magnifying-glass' },
+            outro:     { nome: 'Outro',       icone: 'fa-clipboard-list' }
+        };
+        const DIAS_CURTOS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+        /* ================= Estado ================= */
+        let visao = 'mes';              // 'mes' | 'semana' | 'dia'
+        let dataRef = new Date();       // data em foco
+        let filtroCultura = 'todas';
+        let cultivos = [];              // vem da API
+        let eventosManuais = carregarEventos();
+
+        /* ================= Helpers ================= */
+        const pad = n => String(n).padStart(2, '0');
+        const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; // sem toISOString (evita bug de fuso)
+        const parseISO = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const $ = id => document.getElementById(id);
+
+        function carregarEventos() {
+            try { return JSON.parse(localStorage.getItem(KEY_EVENTOS)) || []; }
+            catch { return []; }
+        }
+        function persistir() {
+            try { localStorage.setItem(KEY_EVENTOS, JSON.stringify(eventosManuais)); }
+            catch (e) { console.error('Não foi possível salvar eventos', e); }
+        }
+
+        /* ================= Dados: cultivos (API) + eventos ================= */
+        async function carregarCultivos() {
+            try {
+                const r = await fetch(`${API}/cultivos`);
+                if (r.ok) cultivos = await r.json();
+            } catch (e) {
+                console.error('Erro ao carregar cultivos:', e);
+                toast('Não foi possível carregar os cultivos. O backend está rodando?', true);
+            }
+            preencherSelectsCultura();
+            render();
+        }
+
+        // Eventos gerados automaticamente a partir dos cultivos (somente leitura)
+        function eventosAutomaticos() {
+            const lista = [];
+            cultivos.forEach(c => {
+                if (c.dataPlantio) lista.push({
+                    id: `auto-plantio-${c.id}`, auto: true, tipo: 'plantio',
+                    titulo: `Plantio: ${c.cultura}`, culturaId: String(c.id), culturaNome: c.cultura,
+                    data: c.dataPlantio, hora: '', concluido: false
+                });
+                if (c.previsaoColheita) lista.push({
+                    id: `auto-colheita-${c.id}`, auto: true, tipo: 'colheita',
+                    titulo: `Colheita prevista: ${c.cultura}`, culturaId: String(c.id), culturaNome: c.cultura,
+                    data: c.previsaoColheita, hora: '', concluido: false
+                });
+            });
+            return lista;
+        }
+
+        function todosEventos() {
+            let lista = [...eventosAutomaticos(), ...eventosManuais];
+            if (filtroCultura !== 'todas') lista = lista.filter(e => String(e.culturaId) === filtroCultura);
+            return lista;
+        }
+
+        function eventosDoDia(dataIso) {
+            return todosEventos()
+                .filter(e => e.data === dataIso)
+                .sort((a, b) => (a.hora || '').localeCompare(b.hora || ''));
+        }
+
+        const atrasado = ev => !ev.auto && !ev.concluido && ev.data < iso(new Date());
+
+        /* ================= Filtro / selects ================= */
+        function preencherSelectsCultura() {
+            const opcoes = cultivos.map(c => `<option value="${c.id}">${esc(c.cultura)}</option>`).join('');
+            $('filtroCultura').innerHTML = `<option value="todas">Todas as culturas</option>${opcoes}`;
+            $('filtroCultura').value = filtroCultura;
+            $('evCultura').innerHTML = `<option value="">Sem cultura</option>${opcoes}`;
+        }
+        function mudarFiltro() {
+            filtroCultura = $('filtroCultura').value;
+            render();
+        }
+
+        /* ================= Navegação ================= */
+        function setVisao(v) {
+            visao = v;
+            document.querySelectorAll('#viewSwitch button').forEach(b => b.classList.toggle('active', b.dataset.visao === v));
+            render();
+        }
+        function navegar(dir) {
+            if (visao === 'mes') dataRef = new Date(dataRef.getFullYear(), dataRef.getMonth() + dir, 1);
+            else if (visao === 'semana') dataRef = new Date(dataRef.getFullYear(), dataRef.getMonth(), dataRef.getDate() + 7 * dir);
+            else dataRef = new Date(dataRef.getFullYear(), dataRef.getMonth(), dataRef.getDate() + dir);
+            render();
+        }
+        function irHoje() { dataRef = new Date(); render(); }
+
+        /* ================= Renderização ================= */
+        function chip(ev) {
+            const icone = ev.concluido ? 'fa-circle-check' : TIPOS[ev.tipo].icone;
+            return `<div class="cal-event tipo-${ev.tipo} ${ev.concluido ? 'done' : ''} ${atrasado(ev) ? 'overdue' : ''}"
+                         data-evento="${esc(ev.id)}" title="${esc(ev.titulo)}">
+                        <i class="fa-solid ${icone}"></i>
+                        <span>${ev.hora ? ev.hora + ' ' : ''}${esc(ev.titulo)}</span>
+                    </div>`;
+        }
+
+        function render() {
+            if (visao === 'mes') renderMes();
+            else if (visao === 'semana') renderSemana();
+            else renderDia();
+        }
+
+        function renderMes() {
+            const y = dataRef.getFullYear(), m = dataRef.getMonth();
+            $('calTitulo').textContent = new Date(y, m, 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+
+            const offset = new Date(y, m, 1).getDay();
+            const hoje = iso(new Date());
+            let html = `<div class="cal-weekdays">${DIAS_CURTOS.map(d => `<div>${d}</div>`).join('')}</div><div class="cal-month-grid">`;
+
+            for (let i = 0; i < 42; i++) {
+                const d = new Date(y, m, 1 - offset + i);
+                const di = iso(d);
+                const evs = eventosDoDia(di);
+                const MAX = 3;
+                html += `<div class="cal-cell ${d.getMonth() !== m ? 'other-month' : ''} ${di === hoje ? 'today' : ''}" data-dia="${di}">
+                    <div class="day-num">${d.getDate()}</div>
+                    ${evs.slice(0, MAX).map(chip).join('')}
+                    ${evs.length > MAX ? `<div class="more-link" data-vermais="${di}">+${evs.length - MAX} mais</div>` : ''}
+                </div>`;
+            }
+            $('calView').innerHTML = html + '</div>';
+        }
+
+        function renderSemana() {
+            const inicio = new Date(dataRef.getFullYear(), dataRef.getMonth(), dataRef.getDate() - dataRef.getDay());
+            const fim = new Date(inicio.getFullYear(), inicio.getMonth(), inicio.getDate() + 6);
+            const fmt = d => d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' });
+            $('calTitulo').textContent = `${fmt(inicio)} – ${fmt(fim)} ${fim.getFullYear()}`;
+
+            const hoje = iso(new Date());
+            let html = '<div class="cal-week-grid">';
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(inicio.getFullYear(), inicio.getMonth(), inicio.getDate() + i);
+                const di = iso(d);
+                const evs = eventosDoDia(di);
+                html += `<div class="week-col ${di === hoje ? 'today' : ''}" data-dia="${di}">
+                    <div class="week-head"><small>${DIAS_CURTOS[d.getDay()]}</small><strong>${d.getDate()}</strong></div>
+                    ${evs.map(chip).join('')}
+                </div>`;
+            }
+            $('calView').innerHTML = html + '</div>';
+        }
+
+        function renderDia() {
+            const di = iso(dataRef);
+            $('calTitulo').textContent = dataRef.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            const evs = eventosDoDia(di);
+
+            if (!evs.length) {
+                $('calView').innerHTML = `<div class="empty-state" data-dia="${di}" style="cursor:pointer;">
+                    <i class="fa-regular fa-calendar-plus"></i>Nenhuma atividade neste dia. Clique para adicionar.</div>`;
+                return;
+            }
+
+            $('calView').innerHTML = `<div class="day-list">` + evs.map(ev => {
+                const cultura = ev.culturaNome ? ` • <i class="fa-solid fa-seedling"></i> ${esc(ev.culturaNome)}` : '';
+                let badge = '<span class="badge badge-pend">Pendente</span>';
+                if (ev.auto) badge = '<span class="badge badge-auto">Automático</span>';
+                else if (ev.concluido) badge = '<span class="badge badge-ok">Concluída</span>';
+                else if (atrasado(ev)) badge = '<span class="badge badge-late">Atrasada</span>';
+
+                return `<div class="day-card tipo-${ev.tipo} ${ev.concluido ? 'done' : ''} ${atrasado(ev) ? 'overdue' : ''}" data-evento="${esc(ev.id)}">
+                    <div class="day-time">${ev.hora || 'Dia todo'}</div>
+                    <div class="day-info">
+                        <h4>${esc(ev.titulo)}</h4>
+                        <p><i class="fa-solid ${TIPOS[ev.tipo].icone}"></i> ${TIPOS[ev.tipo].nome}${cultura}${ev.obs ? ' • ' + esc(ev.obs) : ''}</p>
+                    </div>
+                    ${badge}
+                    ${ev.auto ? '' : `<button class="check-btn ${ev.concluido ? 'on' : ''}" data-toggle="${esc(ev.id)}" title="Marcar como concluída"><i class="fa-solid fa-check"></i></button>`}
+                </div>`;
+            }).join('') + `</div>`;
+        }
+
+        // Um único listener para todos os cliques dentro do calendário
+        $('calView').addEventListener('click', e => {
+            const t = e.target.closest('[data-toggle]');
+            if (t) { toggleConcluido(t.dataset.toggle); return; }
+            const ev = e.target.closest('[data-evento]');
+            if (ev) { abrirEvento(ev.dataset.evento); return; }
+            const mais = e.target.closest('[data-vermais]');
+            if (mais) { dataRef = parseISO(mais.dataset.vermais); setVisao('dia'); return; }
+            const dia = e.target.closest('[data-dia]');
+            if (dia) abrirModalNovo(dia.dataset.dia);
+        });
+        document.querySelectorAll('#viewSwitch button').forEach(b => b.addEventListener('click', () => setVisao(b.dataset.visao)));
+
+        /* ================= Legenda e select de tipos ================= */
+        $('legenda').innerHTML = Object.entries(TIPOS).map(([k, t]) =>
+            `<div class="legend-item"><span class="legend-dot tipo-${k}"></span>${t.nome}</div>`).join('');
+        $('evTipo').innerHTML = Object.entries(TIPOS).map(([k, t]) => `<option value="${k}">${t.nome}</option>`).join('');
+
+        /* ================= Modal: criar / editar ================= */
+        function abrirModalNovo(dataIso) {
+            $('formEvento').reset();
+            $('evId').value = '';
+            $('evData').value = dataIso || iso(dataRef);
+            prepararInsumo(null);
+            $('modalEventoTitulo').textContent = 'Novo Evento';
+            $('btnExcluirEvento').style.display = 'none';
+            if (filtroCultura !== 'todas') $('evCultura').value = filtroCultura; // já vincula à cultura filtrada
+            $('modalEvento').style.display = 'flex';
+        }
+
+        function abrirEvento(id) {
+            const ev = eventosManuais.find(e => e.id === id);
+            if (!ev) { // evento automático
+                toast('Este evento vem do cadastro do cultivo. Para alterá-lo, edite o cultivo na página Cultivos.', true);
+                return;
+            }
+            $('evId').value = ev.id;
+            $('evTitulo').value = ev.titulo;
+            $('evTipo').value = ev.tipo;
+            $('evCultura').value = ev.culturaId || '';
+            $('evData').value = ev.data;
+            $('evHora').value = ev.hora || '';
+            $('evLembrete').value = ev.lembrete ?? '';
+            $('evObs').value = ev.obs || '';
+            $('evConcluido').checked = !!ev.concluido;
+            prepararInsumo(ev);
+            $('modalEventoTitulo').textContent = 'Editar Evento';
+            $('btnExcluirEvento').style.display = 'flex';
+            $('modalEvento').style.display = 'flex';
+        }
+
+        function fecharModal() {
+            $('modalEvento').style.display = 'none';
+            $('formEvento').reset();
+        }
+
+        function salvarEvento(e) {
+            e.preventDefault();
+            const id = $('evId').value;
+            const culturaId = $('evCultura').value;
+            const cultura = cultivos.find(c => String(c.id) === culturaId);
+
+            const ev = {
+                id: id || 'ev-' + Date.now(),
+                titulo: $('evTitulo').value.trim(),
+                tipo: $('evTipo').value,
+                culturaId: culturaId || null,
+                culturaNome: cultura ? cultura.cultura : null,
+                data: $('evData').value,
+                hora: $('evHora').value,
+                lembrete: $('evLembrete').value,
+                obs: $('evObs').value.trim(),
+                concluido: $('evConcluido').checked,
+                insumoId: $('evInsumo').value,
+                insumoQtd: $('evInsumoQtd').value === '' ? null : Number($('evInsumoQtd').value),
+                baixado: false
+            };
+            const anterior = id ? eventosManuais.find(x => x.id === id) : null;
+            if (anterior) ev.baixado = !!anterior.baixado;
+            tratarBaixaEstoque(ev);   // desconta (ou devolve) do estoque, se for o caso
+
+            if (id) eventosManuais = eventosManuais.map(x => x.id === id ? ev : x);
+            else eventosManuais.push(ev);
+
+            // reagendou? então o lembrete pode voltar a disparar
+            const av = JSON.parse(localStorage.getItem(KEY_AVISADOS) || '[]').filter(x => x !== ev.id);
+            localStorage.setItem(KEY_AVISADOS, JSON.stringify(av));
+
+            if (ev.lembrete !== '' && 'Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+
+            persistir();
+            fecharModal();
+            dataRef = parseISO(ev.data);
+            render();
+        }
+
+        function excluirEvento() {
+            const id = $('evId').value;
+            if (id && confirm('Deseja realmente excluir este evento?')) {
+                eventosManuais = eventosManuais.filter(e => e.id !== id);
+                persistir();
+                fecharModal();
+                render();
+            }
+        }
+
+        function toggleConcluido(id) {
+            const ev = eventosManuais.find(e => e.id === id);
+            if (!ev) return;
+            ev.concluido = !ev.concluido;
+            tratarBaixaEstoque(ev);
+            persistir();
+            render();
+        }
+
+        /* ================= Integração com o Estoque ================= */
+        function lerJSON(key) { try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; } }
+
+        function prepararInsumo(ev) {
+            const itens = lerJSON(KEY_ESTOQUE);
+            $('evInsumo').innerHTML = '<option value="">Nenhum</option>' + itens
+                .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+                .map(i => `<option value="${esc(i.id)}">${esc(i.nome)} (${i.quantidade} ${esc(i.unidade)})</option>`).join('');
+            $('evInsumo').value = ev?.insumoId || '';
+            $('evInsumoQtd').value = ev?.insumoQtd ?? '';
+            const travar = !!ev?.baixado;
+            $('evInsumo').disabled = travar;
+            $('evInsumoQtd').disabled = travar;
+            $('evInsumoAviso').textContent = travar
+                ? 'A baixa deste insumo já foi feita no estoque. Desmarque "concluída" para devolvê-lo ao estoque.'
+                : (itens.length ? 'Opcional. Ao marcar a atividade como concluída, você poderá descontar o insumo do estoque.'
+                                : 'Nenhum produto no estoque ainda. Cadastre na página Estoque para vincular insumos às atividades.');
+            atualizarUnInsumo();
+        }
+
+        function atualizarUnInsumo() {
+            const item = lerJSON(KEY_ESTOQUE).find(i => i.id === $('evInsumo').value);
+            $('evInsumoUn').textContent = item ? `(${item.unidade})` : '';
+        }
+
+        // Grava item + movimentação no mesmo formato que a página Estoque usa
+        function movimentarEstoque(itens, item, delta, tipo, motivo, eventoId) {
+            item.quantidade = Math.round((item.quantidade + delta) * 1000) / 1000;
+            const hoje = iso(new Date());
+            const movs = lerJSON(KEY_MOVS);
+            movs.push({
+                id: 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+                itemId: item.id, itemNome: item.nome, unidade: item.unidade,
+                tipo, quantidade: Math.abs(delta), delta, saldoApos: item.quantidade,
+                data: hoje, criadoEm: Date.now(), motivo, origem: 'atividade', eventoId
+            });
+            localStorage.setItem(KEY_ESTOQUE, JSON.stringify(itens));
+            localStorage.setItem(KEY_MOVS, JSON.stringify(movs));
+        }
+
+        // Concluiu a atividade -> pergunta e desconta. Reabriu -> pergunta e devolve.
+        function tratarBaixaEstoque(ev) {
+            const usaInsumo = ev.insumoId && Number(ev.insumoQtd) > 0;
+            if (!usaInsumo) return;
+            const itens = lerJSON(KEY_ESTOQUE);
+            const item = itens.find(i => i.id === ev.insumoId);
+            const qtd = Number(ev.insumoQtd);
+
+            if (ev.concluido && !ev.baixado) {
+                if (!item) { toast('O insumo não existe mais no estoque. A baixa não foi feita.', true); return; }
+                if (qtd > item.quantidade) {
+                    toast(`Estoque insuficiente de ${item.nome} (disponível: ${item.quantidade} ${item.unidade}). A baixa não foi feita.`, true);
+                    return;
+                }
+                if (confirm(`Descontar ${qtd} ${item.unidade} de "${item.nome}" do estoque?`)) {
+                    movimentarEstoque(itens, item, -qtd, 'saida', `Uso em atividade: ${ev.titulo}`, ev.id);
+                    ev.baixado = true;
+                    toast(`Baixa feita: ${qtd} ${item.unidade} de ${item.nome}.`, true);
+                }
+            } else if (!ev.concluido && ev.baixado) {
+                if (item && confirm(`A atividade foi reaberta. Devolver ${qtd} ${item.unidade} de "${item.nome}" ao estoque?`)) {
+                    movimentarEstoque(itens, item, qtd, 'entrada', `Estorno: atividade reaberta (${ev.titulo})`, ev.id);
+                    ev.baixado = false;
+                    toast('Insumo devolvido ao estoque.', true);
+                } else if (!item) {
+                    ev.baixado = false;
+                }
+            }
+        }
+
+        /* ================= Lembretes ================= */
+        function toast(msg, info = false) {
+            const el = document.createElement('div');
+            el.className = 'toast' + (info ? ' info' : '');
+            el.innerHTML = `<i class="fa-solid ${info ? 'fa-circle-info' : 'fa-bell'}"></i><div>${esc(msg)}</div>`;
+            $('toastBox').appendChild(el);
+            setTimeout(() => el.remove(), 7000);
+        }
+
+        function checarLembretes() {
+            const agora = Date.now();
+            const avisados = JSON.parse(localStorage.getItem(KEY_AVISADOS) || '[]');
+            let mudou = false;
+
+            eventosManuais.forEach(ev => {
+                if (ev.concluido || ev.lembrete === '' || ev.lembrete == null || avisados.includes(ev.id)) return;
+                const alvo = parseISO(ev.data);
+                const [h, mi] = (ev.hora || '08:00').split(':').map(Number); // sem horário = 08:00
+                alvo.setHours(h, mi, 0, 0);
+                const disparo = alvo.getTime() - Number(ev.lembrete) * 60000;
+
+                if (agora >= disparo && agora <= alvo.getTime() + 3600000) {
+                    const texto = `Lembrete: ${ev.titulo}${ev.hora ? ' às ' + ev.hora : ''}`;
+                    toast(texto);
+                    if ('Notification' in window && Notification.permission === 'granted') new Notification('TerraViva', { body: texto });
+                    avisados.push(ev.id);
+                    mudou = true;
+                }
+            });
+            if (mudou) localStorage.setItem(KEY_AVISADOS, JSON.stringify(avisados));
+        }
+
+        /* ================= Início ================= */
+        render();
+        carregarCultivos();
+        checarLembretes();
+        setInterval(checarLembretes, 60000);
+    </script>
+</body>
+</html>

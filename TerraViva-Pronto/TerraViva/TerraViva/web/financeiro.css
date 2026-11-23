@@ -1,0 +1,82 @@
+/* Reaproveita o visual dos módulos anteriores (KPIs, alertas, chips, tabelas, badges, modais) */
+@import url('estoque.css');
+
+.kpi-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.kpi-card.pos .kpi-value { color: var(--accent-primary); }
+.kpi-card.neg .kpi-value { color: var(--danger); }
+.kpi-card.pos .kpi-header i { color: var(--accent-primary); }
+.kpi-card.neg .kpi-header i { color: var(--danger); }
+.kpi-card.warn .kpi-header i { color: var(--warning); }
+
+/* ---------- Barra de período ---------- */
+.period-bar { padding: 14px 20px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.period-bar label { font-size: 13px; color: var(--text-muted); }
+.period-bar input[type="date"] {
+    padding: 9px 12px; background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border-light); border-radius: 8px;
+    color: var(--text-main); outline: none; font-size: 13px;
+}
+.period-bar input[type="date"]:focus { border-color: var(--accent-primary); }
+.period-range { font-size: 12.5px; color: var(--text-muted); margin-left: auto; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.chart-box { position: relative; height: 260px; }
+
+/* ---------- Contas a pagar / receber ---------- */
+.bill {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    background: rgba(0,0,0,0.2);
+}
+.bill-info { flex: 1; min-width: 0; }
+.bill-info strong { display: block; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bill-info span { font-size: 12px; color: var(--text-muted); }
+.bill-valor { font-weight: 600; font-size: 14px; white-space: nowrap; }
+.btn-mini {
+    background: transparent; border: 1px solid var(--border-light);
+    color: var(--text-main); padding: 6px 12px; border-radius: 8px;
+    font-size: 12px; cursor: pointer; white-space: nowrap; transition: all .3s;
+}
+.btn-mini:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+
+/* ---------- Valores ---------- */
+.val-pos { color: var(--accent-primary); font-weight: 600; white-space: nowrap; }
+.val-neg { color: var(--danger); font-weight: 600; white-space: nowrap; }
+
+/* ---------- Custo por cultivo ---------- */
+tr.selectable { cursor: pointer; }
+tr.selectable.sel td { background: rgba(74,222,128,0.08); }
+.cost-detail {
+    background: rgba(0,0,0,0.22);
+    border: 1px solid var(--border-light);
+    border-radius: 14px; padding: 20px;
+    display: flex; flex-direction: column; gap: 14px;
+}
+.cost-detail h4 { font-size: 16px; display: flex; align-items: center; gap: 10px; }
+.cost-line { display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; }
+.cost-line .row { display: flex; justify-content: space-between; }
+.cost-line .bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+.cost-line .bar > div { height: 100%; background: var(--accent-primary); border-radius: 4px; }
+.cost-total {
+    display: flex; justify-content: space-between;
+    padding-top: 12px; border-top: 1px solid var(--border-light);
+    font-weight: 700; font-size: 15px;
+}
+.cost-sum { display: flex; justify-content: space-between; font-size: 13.5px; }
+
+/* ---------- Formulários ---------- */
+.form-group textarea {
+    padding: 10px 14px; background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border-light); border-radius: 8px;
+    color: var(--text-main); outline: none; font-size: 14px;
+    resize: vertical; min-height: 60px;
+}
+.form-group textarea:focus { border-color: var(--accent-primary); }
+.check-line { flex-direction: row !important; align-items: center; gap: 10px !important; }
+.check-line input { width: 18px; height: 18px; accent-color: var(--accent-primary); }
+
+@media (max-width: 1000px) {
+    .kpi-grid.cols-3, .grid-2 { grid-template-columns: 1fr; }
+}
